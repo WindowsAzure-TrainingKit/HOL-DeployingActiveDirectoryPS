@@ -1,11 +1,17 @@
-<a name='handsonlab' />
-# Deploying Active Directory in Windows Azure (PowerShell) #
----
+﻿<a name="Deploy-AD-in-Windows-Azure" />
+# Deploy Active Directory in Windows Azure #
 
-<a name='Overview' />
+---
+<a name="Overview" />
 ## Overview ##
 
-In this hands-on lab, you will walk through the steps  required to deploy an Active Directory domain in the cloud and provision new virtual machines into this domain. 
+In this lab, you will deploy Active Directory in Windows Azure. In the demo environment, there already is a first domain controller running, so you will install a second domain controller.
+
+When deploying Active Directory in Windows Azure, two aspects are important to point out.
+
+The first one is the networking configuration. Domain members and domain controllers need to find the DNS server hosting the domain DNS information. You will configure the Azure network configuration, so that it the correct DNS server is configured.
+
+Secondly, it is important to avoid the possibility of Active Directory database corruption. Active Directory assumes that it can write its database updates directly to disk. That means that you should place the Active Directory database files on a data disk that does not have write caching enabled.
 
 <a name='Objectives' />
 ### Objectives ###
@@ -35,335 +41,309 @@ The Windows Azure PowerShell Cmdlets are required for this lab. If you have not 
 
 >**Note:** In order to run through the complete hands-on lab, you must have network connectivity. 
 
-<a name='Exercises' />
+<a name="Exercises" />
 ## Exercises ##
 
-This hands-on lab includes the following exercises:
+<a name="Exercise1" />
+### Exercise 1: Deploy Active Directory in Windows Azure ###
 
-1. [Configuring Virtual Networking](#Exercise1)
-1. [Deploying the first Domain Controller](#Exercise2)
-1. [Provisioning new Virtual Machines into the Domain](#Exercise3)
+<a name="Ex1Task1" />
+#### Task 1 – Examine the current Domain Controller configuration ####
 
-Estimated time to complete this lab: **60 minutes**.
+1. In the Windows Azure portal, in the **Virtual Machines** section, click the **DC01** name. _The DC01 page appears._
 
-<a name='gettingstarted' />
-### Getting Started: Obtaining Subscription's Credentials ###
+	![Selecting the DC01 vm](./images/selecting-the-dc01-vm.png?raw=true "Selecting the DC01 vm")
 
-In order to complete this lab, you will need your subscription’s secure credentials. Windows Azure lets you download a Publish Settings file with all the information required to manage your account in your development environment.
+	_Selecting the DC01 virtual machine_
 
-#### Task 1 - Downloading and Importing a Publish-settings File ####
+1. On the DC01 page, select the **Configure** tab. _The DC01 VM is configured with Virtual Network named **domainvnet**, and a Subnet named **Subnet-1**, containing the IP range 10.0.0.0/24._
 
-> **Note:** If you have done these steps in a previous lab on the same computer you can move on to Exercise 1.
+	![Selecting the configure tab](./images/dc01-configure-tab.png?raw=true "Selecting the configure tab")
+
+	_Selecting the configure tab_
+
+1. On the Virtual Machines page, select the **DC01** virtual machine, and then on the toolbar, click the **Connect** icon. _The RDP file for DC01 is downloaded._
+
+	![Downloading the RDP file](./images/downloading-the-rdp-file.png?raw=true "Downloading the RDP file")
+
+	_Downloading the RDP file_
+
+1. In the Windows Security dialog box, enter the credentials for the DC01 virtual machine:
+
+	| Field | Value |
+	|--------|--------|
+	| User account | **Contoso\Administrator** |
+	| Password | **Passw0rd!** |
+ 
+
+	If a Remote Desktop Connection warning appears about the certificate name, click **Yes**.
+
+	![Entering the credentials](./images/entering-the-credentials.png?raw=true "Entering the credentials")
+
+	_Entering the credentials_
+
+1. In the DC01 VM, use the **Windows-X C** command to open a Command Prompt window. 
+
+1. In the Command Prompt window, type, **ipconfig /all**, and then press **Enter**. _The domain controller uses DHCP to receive a dynamically assigned IP address (10.0.0.4) with a lifelong lease time. The DNS server is also assigned as 10.0.0.4._
+
+	![Executing ipconfig](./images/executing-ipconfig.png?raw=true "Executing ipconfig")
+
+	_Executing ipconfig_
 
 
-In this task, you will log on to the Windows Azure Portal and download the publish-settings file. This file contains the secure credentials and additional information about your Windows Azure Subscription to use in your development environment. Then, you will import this file using the Windows Azure Cmdlets in order to install the certificate and obtain the account information.
+<a name="Ex1Task2" />
+#### Task 2 – Configure Virtual Networking ####
 
-1.	Open an Internet Explorer browser and go to <https://windows.azure.com/download/publishprofile.aspx>.
+1. In the Windows Azure portal, on the **Networks** page, click the **domainvnet** name.
 
-1.	Sign in using the **Microsoft Account** associated with your **Windows Azure** account.
-
-1.	**Save** the publish-settings file to your local machine.
-
-	![Downloading publish-settings file](images/downloading-publish-settings-file.png?raw=true 'Downloading publish-settings file')
-
-	_Downloading publish-settings file_
-
-	> **Note:** The download page shows you how to import the publish-settings file using Visual Studio Publish box. This lab will show you how to import it using the Windows Azure PowerShell Cmdlets instead.
-
-1.	In the start menu under **Windows Azure**, right-click **Windows Azure PowerShell** and choose **Run as Administrator**.
-
-1.	Change the PowerShell execution policy to **RemoteSigned**. When asked to confirm press **Y** and then **Enter**.
+	![Clicking the domainvnet](./images/clicking-the-domainvnet.png?raw=true "Clicking the domainvnet")
 	
-	<!-- mark:1 -->
-	````PowerShell
-	Set-ExecutionPolicy RemoteSigned
-	````
+	_Clicking the domainvnet network_
 
-	> **Note:** The Set-ExecutionPolicy cmdlet enables you to determine which Windows PowerShell scripts (if any) will be allowed to run on your computer. Windows PowerShell has four different execution policies:
-	>
-	> - _Restricted_ - No scripts can be run. Windows PowerShell can be used only in interactive mode.
-	> - _AllSigned_ - Only scripts signed by a trusted publisher can be run.
-	> - _RemoteSigned_ - Downloaded scripts must be signed by a trusted publisher before they can be run.
-	> - _Unrestricted_ - No restrictions; all Windows PowerShell scripts can be run.
-	>
-	> For more information about Execution Policies refer to this TechNet article: <http://technet.microsoft.com/en-us/library/ee176961.aspx>
+1. On the **domainvnet** page, select the **Configure** tab. _The domainvnet network currently has one subnet (Subnet-1 - 10.0.0.0/24), and uses DNS server DC01 10.0.0.4._
 
-	
-1.	The following script imports your publish-settings file and generates an XML file with your account information. You will use these values during the lab to manage your Windows Azure Subscription. Replace the placeholder with your publish-setting file's path and execute the script.
+	![domainvnet network information](./images/domainvnet-network-information.png?raw=true "domainvnet network information")
 
-	<!-- mark:1 -->
-	````PowerShell
-	Import-AzurePublishSettingsFile '[YOUR-PUBLISH-SETTINGS-PATH]'   
-	````
+	_domainvnet network information_
 
-1. Execute the following commands and take note of the Subscription name and the storage account name you will use for the exercise.
+1. Click the **add subnet** button. _A new subnet is created: Subnet-2 - 10.0.1.0/24. You can add additional virtual machines in the first subnet. For the lab exercise, we will define a second subnet._
 
-	<!-- mark:1-3 -->
-	````PowerShell
-	Get-AzureSubscription | select SubscriptionName
-	Get-AzureStorageAccount | select StorageAccountName 
-	````
+	![Clicking the add subnet button](./images/clicking-the-add-subnet-button.png?raw=true "Clicking the add subnet button")
 
-1. If you do NOT have a storage account returned above you should create one first.
-  
-	1. Run the following to determine the data center to create your storage account in. Ensure you pick a data center that shows support for PersistentVMRole. 
+	_Clicking the add subnet button_
 
-		````PowerShell
-		Get-AzureLocation  
-		````
+1. On the toolbar, click the **Save** button.
+_The network configuration is saved. Virtual machines that are assigned to different subnets within the same virtual network can connect to each other._
 
-	1. Create your storage account: 
+	![Clicking the save button](./images/clicking-the-save-button.png?raw=true "Clicking the save button")
 
+	_Clicking the save button_
 
-		````PowerShell
-		New-AzureStorageAccount -StorageAccountName '[YOUR-SUBSCRIPTION-NAME]' -Location '[DC-LOCATION]'
-		````
+<a name="Ex1Task3" />
+#### Task 3 - Create a new Virtual Machine with a data disk ####
 
-1. Execute the following command to set your current storage account for your subscription.
+1. On the Start menu, start typing **ise**, and then click **Windows PowerShell ISE**. _For these steps, we will use the PowerShell Integrated Scripting Environment._
+
+	![Opening Windows Powershell ISE](./images/opening-windows-powershell-ise.png?raw=true "Opening Windows Powershell ISE")
+
+	_Opening Windows Powershell ISE_
+
+1. In the PowerShell ISE window, type the following command:
 
 	````PowerShell
-	Set-AzureSubscription -SubscriptionName '[YOUR-SUBSCRIPTION-NAME]' -CurrentStorageAccount '[YOUR-STORAGE-ACCOUNT]'
+	Get-AzureVMImage  |  ft ImageName
 	````
 
-<a name='Exercise1'></a>
-### Exercise 1: Configuring Virtual Networking ###
+	![Retriving the VM images](./images/retriving-the-vm-images.png?raw=true "Retriving the VM images")
 
-Running an Active Directory Domain requires persistent IP addresses and for clients of the Active Directory Domain to point to an AD enabled DNS server. The default internal DNS service (iDNS) in Windows Azure is not an acceptable solution because the IP address assigned to each virtual machine is not persistent. For this solution you will define a virtual network where you can assign the virtual machines to specific subnets. Using this technique you can plan on what the IP address of a specific VM will be and know that it will be persistent. 
+	_Retriving the virtual machine images_
 
-The network configuration used for this lab defines the following:
+	> **Note:** _The list of available image files is displayed. In this task, we will use the latest Windows Server 2012 image, which is a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-Datacenter-201301.01-en.us-30GB.vhd._
 
-- A Virtual Network Named ADVNET with an address prefix of: 192.168.0.0/16
-- A subnet named ADSubnet with an address prefix of: 192.168.1.0/24
-- A subnet named AppSubnet with an address prefix of: 192.168.2.0/24
-
-
-<a name='Ex1Task1' />
-#### Task 1 - Creating an Affinity Group ####
-
-1. Execute the following command to retrieve the Available Data Center Locations. 
+1. In the PowerShell ISE window, type or copy the following commands.
 
 	````PowerShell
-	Get-AzureLocation | select name
+	# Defines image name
+	$imgname = "a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-Datacenter-201301.01-en.us-30GB.vhd"
+
+	# Defines configuration settings
+	$vmname = "DC02"
+	$svcname = "itcampNNNN"
+	$password = "Passw0rd!"
+
+	# Defines network settings
+	$subnetname = "Subnet-2"
+
+	# Defines VM configuration, including size, attached datadisk, and subnet 
+	$dcvm = New-AzureVMConfig  -Name  $vmname  -ImageName  $imgname -InstanceSize "Small"  |
+		Add-AzureProvisioningConfig  -Windows  -Password  $password  |
+		Add-AzureDataDisk  -CreateNew  -DiskSizeInGB  10  -DiskLabel "ADdisk"  -LUN 0  |
+		Set-AzureSubnet  -SubnetName  $subnetname
+
+	# Creates new VM in existing hosted service
+	New-AzureVM  -ServiceName  $svcname  -VMs  $dcvm
 	````
 
-1. Define a variable ($dclocation) and set its value with the name of the data center you want to deploy to.
+	![Executing the powershell commands](./images/executing-the-powershell-commands.png?raw=true "Executing the powershell commands")
+
+	_Executing the powershell commands_
+
+	> **Note:** Do not forget to replace itcampNNNN, with the actual hosted service name you used earlier.
+
+	> **Note:** The **New-AzureVM** cmdlet will create a new hosted service when the -Location or -AffinityGroup parameter is specified, or will use an existing hosted service when those parameters are not specified. 
+
+1. In the Windows Azure console, in the **Virtual Machines** section, wait a few minutes until the **DC02** virtual machine appears (or press F5 to refresh the display).
+
+1. Click the **DC02** name.
+
+	![Selecting the DC02 VM](./images/selecting-the-dc02-vm.png?raw=true "Selecting the DC02 VM")
+
+	_Selecting the DC02 Virtual Machine_
+
+1. On the DC02 page, select the **Endpoints** tab. _Notice that by default the PowerShell cmdlet will add an RDP endpoint for port 3389. Therefore, we did not specify this endpoint configuration in the PowerShell commands._
+
+	![Selecting the endpoints tab](./images/selecting-the-endpoints-tab.png?raw=true "Selecting the endpoints tab")
+
+	_Selecting the endpoints tab_
+
+<a name="Ex1Task4" />
+#### Task 4 - Configure a new data disk ####
+
+1. In the Windows Azure console, in the **Virtual Machines** section, wait a few moments until the status of **DC02** is **Running**.
+
+1. Select the **DC02** virtual machine, and then on the toolbar, click the **Connect** icon.
+
+	![Connecting to the DC02 VM](./images/connecting-to-the-dc02-vm.png?raw=true "Connecting to the DC02 VM")
+
+	_Connecting to the DC02 virtual machine_
+
+1. Open the DC02.rdp file, and connect to the virtual machine. To log on, use credentials:
+
+	| Field | Value |
+	|--------|--------|
+	| Account | **Administrator** |
+	| Password | **Passw0rd!** |
+
+	![Logging on to the DC02 VM](./images/logging-on-to-the-dc02-vm.png?raw=true "Logging on to the DC02 VM")
+
+	_Logging on to the DC02 virtual machine_
+
+1. On DC02, in **Server Manager**, on the **Tools** menu, click **Computer Management**. _The Computer Management console opens._
+
+	![Opening the Computer Manager console](./images/opening-the-computer-manager-console.png?raw=true "Opening the Computer Manager console")
+
+	_Opening the Computer Manager console_
+
+1. In the Computer Management console, in the left pane, select **Disk Management**. _Disk Management recognizes that a new initialize disk is added to the computer, and it will show the Initialize Disk dialog box._
+
+	![Selecting Disk Management](./images/selecting-disk-management.png?raw=true "Selecting Disk Management")
+
+	_Selecting Disk Management_
+
+1. In the Initialize Disk dialog box, click **OK**. _The new Disk 2 is initialized._
+
+	![Initializing the disk 2](./images/initializing-the-disk-2.png?raw=true "Initializing the disk 2")
+
+	_Initializing the disk 2_
+
+1. On Disk 2, right-click the **Unallocated** space, and then click **New Simple Volume**. _The New Simple Volume Wizard opens._
+
+	![Formating the unallocated space](./images/formating-the-unallocated-space.png?raw=true "Formating the unallocated space")
+
+	_Formating the unallocated space_
+
+1. In the new Simple Volume Wizard, click **Next**.
+
+	![Using the Simple Volume Wizard](./images/using-the-simple-volume-wizard.png?raw=true "Using the Simple Volume Wizard")
+
+	_Using the Simple Volume Wizard_
+
+1. On the Specify Volume Size page, click **Next**. _This means that the entire available space (10237 MB) will become a new volume._
+
+	![Specifing the volume size](./images/specifing-the-volume-size.png?raw=true "Specifing the volume size")
+
+	_Specifing the volume size_
+
+1. On the Assign Drive Letter or Path page, ensure drive letter **F** is selection, and then click **Next**.
+
+	![Assigning the drive letter](./images/assigning-the-drive-letter.png?raw=true "Assigning the drive letter")
+
+	_Assigning the drive letter_
+
+1. On the Format Partition page, in the **Volume Label** text box, type **AD DS Data**, and then click **Next**.
+
+	![Specifing the volume label](./images/specifing-the-volume-label.png?raw=true "Specifing the volume label")
+
+	_Specifing the volume label_
+
+1. On the Completing the New Simple Volume Wizard page, click **Finish**. _Windows will quick format the disk, and assign drive letter F:._
+
+	![Completing the wizard](./images/completing-the-wizard.png?raw=true "Completing the wizard")
+
+	_Completing the wizard_
+
+1. Close the Computer Management console.
+
+<a name="Ex1Task5" />
+#### Task 5 - Create a Domain Controller ####
+
+1. In the DC02 VM, use the Windows X C command to open a Command Prompt window. In the Command Prompt Window, type **ipconfig /all**, and then press **Enter**. _The new VM uses IP address 10.0.1.4, and DNS server address 10.0.0.4._
+
+	![Executing ipconfig](./images/executing-ipconfig.png?raw=true "Executing ipconfig")
+
+	_Executing ipconfig_
+
+1.  In the Command Prompt window, type **ping 10.0.0.4**, and then press **Enter**. _The replies from 10.0.0.4 confirm that the new VM can connect to DC01._
+
+	![Pinging the DC01 VM](./images/pinging-the-dc01-vm.png?raw=true "Pinging the DC01 VM")
+
+	_Pinging the DC01 virtual machine_
+
+1. Open a PowerShell window, and type the following command:
 
 	````PowerShell
-	$dclocation = '[YOUR-LOCATION]'
+	Add-WindowsFeature -Name AD-Domain-Services  -IncludeManagementTools
 	````
 
-1. The first step is to create an affinity group with the same name specified in ad-vnet.xml (adag). 
+	_Windows is installing the Active Directory Domain Services role._
+
+	![Adding the AD feature](./images/adding-the-ad-feature.png?raw=true "Adding the AD feature")
+
+	_Adding the Active Directory feature_
+
+1. When the feature installation has completed, type the following single command to promote the domain controller:
 
 	````PowerShell
-	$affinityGroup = 'adag'
-	New-AzureAffinityGroup -Name $affinityGroup -Location $dclocation
+	Install-ADDSDomainController  -DomainName "contoso.com"  -SiteName "Default-First-Site-Name" -InstallDns:$false  -NoGlobalCatalog:$false  -Credential (Get-Credential)  -DatabasePath "F:\NTDS"  -LogPath "F:\NTDS"  -SysvolPath "F:\SYSVOL"  -NoRebootOnCompletion:$false  -Force:$true
 	````
 
-1. Next, apply the virtual network settings in the file **ad-vnet.xml** under **Source\Assets** folder, to your subscription.
+	_The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is a data disk we added earlier, and does not have caching enabled._
+
+	![Promoting the domain controller with powershell ](./images/promoting-the-domain-controller-with-powershell.png?raw=true "Promoting the domain controller with powershell")
+
+1. In the Credential dialog box, use the following credentials:
+
+	| Field | Value |
+	|--------|--------|
+	| User account | **Contoso\Administrator** |
+	| Password | **Passw0rd!** |
+
+	![Using administrator credentials](./images/using-administrator-credentials.png?raw=true "Using administrator credentials")
+
+	_Using administrator credentials_
+
+1. At the **SafeModeAdministratorPassword** prompt and the **Confirm SafeModeAdministratorPassword** prompt, type **Passw0rd!**, and then press **Enter**. _The computer is promoted to domain controller. After a few moments, the DC02 VM will restart. You will lose the connection to the restarting VM._
+
+	![Configuring the administrator password](./images/configuring-the-administrator-password.png?raw=true "Configuring the administrator password")
+
+	_Configuring the administrator password_
+
+1. Wait two minutes for the DC02 VM to restart.
+In the Azure portal, on the Virtual Machines page, select **DC02**, and on the toolbar, click the **Connect** icon.
+
+	![Downloading the DC02 RDP file](./images/downloading-dc02-rdp-file.png?raw=true "Downloading the DC02 RDP file")
+
+	_Downloading the DC02 RDP file_
+
+1. Open the DC02.rdp file, and connect to the virtual machine. To log on, use credentials:
+
+	| Field | Value |
+	|--------|--------|
+	| User account | **Contoso\Administrator** |
+	| Password | **Passw0rd!** |
+
+	![Connecting to the VM](./images/connecting-to-the-vm.png?raw=true "Connecting to the VM")
+
+	_Connecting to the virtual machine_
+
+1. To verify that DC02 is working properly, run the following command:
 
 	````PowerShell
-	$ConfigPath = 'c:\WATK\Labs\DeployingActiveDirectoryPS\Source\Assets\ad-vnet.xml' 
-	Set-AzureVNetConfig -ConfigurationPath $ConfigPath 
+	repadmin.exe /syncall
 	````
 
-1. Create a storage account in the same affinity group as the virtual network. The storage account you create must be unique.
+	_This output of the command confirms that DC02 was successfully promoted to domain controller._
 
-	````PowerShell
-	New-AzureStorageAccount -StorageAccountName 'someuniquename' -AffinityGroup $affinityGroup
-	````
-
-<a name='Exercise2'></a>
-### Exercise 2: Deploying the first Domain Controller ###
-
-We can choose whether to use the Windows Azure Portal or PowerShell to provision the virtual machine that will be our domain controller. In this exercise, you will use PowerShell since you will be using it in the next exercise to demonstrate domain join automation.
-
-
-
-<a name='Ex2Task1' />
-#### Task 1 - Creating the First VM and Deployment with Networking Settings ####
-
-1. Run the following command to return the available images.
-
-	````PowerShell
-	Get-AzureVMImage | Select ImageName
-	````
-
-1. Choose one of the Windows Server 2008 R2 Images and specify it as the value to **$imgname** below.
-
-	````PowerShell
-	$imgname = 'ImageNameGoesHere'
-	````
-
-1. Next run the following commands to create the domain controller in the correct virtual network and subnet with an additional disk of 20 GB.
-
-	````PowerShell
-
-	$cloudsvc = 'some-unique-name'
-	$vmname1 = 'ad-dc'
-	$subnet = 'ADSubnet'
-	$vnet = 'ADVNET'
-	$pwd = '[YOUR-PASSWORD]'
-
-	New-AzureVMConfig -Name $vmname1 -InstanceSize Small -ImageName $imgname |
-		Add-AzureProvisioningConfig -Windows -Password $pwd |
-		Set-AzureSubnet -SubnetNames 'ADSubnet' |
-		Add-AzureDataDisk -CreateNew -DiskSizeInGB 20 -DiskLabel 'DITDrive' -LUN 0 |
-		New-AzureVM -ServiceName $cloudsvc -AffinityGroup 'adag' -VNetName 'ADVNET'
-
-	````
-
-<a name='Ex2Task3' />
-#### Task 3 - Creating the Domain Controller ####
-
-1. Login to the newly created virtual machine in the Windows Azure Portal by clicking on Virtual Machines, the VM **ad-dc**, and click **Connect** at the bottom.
-
-> **Note:** Before connecting to the VM, you have to wait until it gets to the Running state.
-
-1. Once logged in, start a console session and run the command **IPConfig** and copy the IPv4 IP Address returned. You will use it later to provision new VMs in the domain.
-
-	![VM-IP](images/vm-ip.png?raw=true "VM ip")
-
-	_Virtual Machine IP_
-
-1. Open **Computer Management** by going to **Start** | **All Programs** | **Administrative Tools** | **Computer Management**.
-
-1. Expand the **Storage** node and select **Disk Management**.
-
-	![Opening Disk Management](images/opening-disk-management.png?raw=true)
-
-	_Opening Disk Management_
-
-1. Initialize **Disk 2** by clicking **OK** in the **Initialize Disk** dialog.
-
-	![Initializing Disk](images/initializing-disk.png?raw=true)
-
-	_Initializing the disk_
-
-1. Right-click over the unallocated disk space and select **New Simple Volume**.
-
-	![Creating a new simple volume](images/creating-a-new-simple-volume.png?raw=true)
-
-	_Creating a New Simple Volume_
-
-1. Follow the **New Simple Volume Wizard** and set the **Volume label** to _DIT_. Click **Finish**. The disk will be formatted and ready to be used.
-
-	![Formatted disk](images/formatted-disk.png?raw=true)
-
-	_Formatted disk_
-
-1. Now, you will start the **Active Directory Domain Services Installation Wizard**. To do this, click start and run and type in _DCPromo_ and press **enter**. Wait until the ADDS binaries are installed.
-
-	![dcpromostart](images/dcpromostart.png?raw=true)	
-
-	_Active Directory Domain Services Installation Wizard_
-
-1. Click **Next** two times. 
-
-1. Choose **Create a new domain in a new forest** and click **Next**.
-
-	![newforest](images/newforest.png?raw=true)
-
-	_Creating a new domain in a new forest_
-
-1. Name the **Forest Root Domain** _contoso.com_ and click **Next**.
-
-	![setting the domain name](images/setting-the-domain-name.png?raw=true)
-
-	_Setting the domain name_
-
-1. Set the functional level to **Windows Server 2008 R2**. Click **Next** and wait until the process completes.
-
-	![functionallevel](images/functionallevel.png?raw=true)
-
-	_Selecting the forest functional level_
-
-1.	Use the default selection to create a **DNS server**. Click **Next**.
-
-	![DNSSelection](images/dnsselection.png?raw=true)
-
-	_Selecting additional options_
-
-1. Choose **Yes**, the computer will use an IP address automatically assigned by a DHCP server (not recommended).
-	 
-	![dhcp-address](images/dhcp-address.png?raw=true)
-
-	_Using automatically assigned IP_
-
-	>**Note:** Using Virtual Networks with Windows Azure IaaS the IP address has a lifetime of the virtual machine lease. Do NOT set the IP address to static.
-
-1. Since you are not integrating into an existing AD environment in this lab, click **Yes**.
-
-	![dns-warning](images/dns-warning.png?raw=true)
-
-	_DNS Creation Warning_
-
-1. Set the **Database**, **Log files** and the **SYSVOL** folders location to the recently formatted data disk (for example _F:\\NTDS_ for Database, _F:\\NTDSLogs_ for Logs and _F:\\SYSVOL_ for SYSVOL). Click **Next** to continue.
-
-	![dit-location](images/dit-location.png?raw=true)
-
-	_Setting values for Database, Logs and SYSVOL folders_
-
-1. Type in the same password used for provisioning the original machine and click **Next**.
-
-	![ad-password](images/ad-password.png?raw=true)
-
-	_Setting Domain Administrator password_
-
-1. Finally, click **Next** again and allow for Active Directory to be configured, this will take several minutes. When prompted to allow reboot choose **Restart Now**.
-
-
-
-<a name='Exercise3'></a>
-### Exercise 3: Provisioning new Virtual Machines into the Domain ###
-
-Once the domain controller has finished booting you will now be able to provision virtual machines and have them automatically join the domain when they are provisioned. This is accomplished by creating a new cloud service as the container for the new virtual machines. The DNS servers for the VMs can be automatically configured by specifying DNS settings during the initial deployment of the cloud service. 
-
-
-<a name='Ex3Task1'></a>
-#### Task 1 - Provisioning a Virtual Machine that is Domain Joined on Boot ###
-
-The example below demonstrates how you can automatically provision new virtual machines that are joined to the Active Directory domain at boot.
-
-
-1. Execute the following commands in the Windows Azure PowerShell console.
-
-	>**Note:** To get the IP Address of the Domain Controller, connect to the VM you have created. In a command prompt, enter **IPConfig** and copy the IPv4
-	>
-	> 	![VM-IP](images/vm-ip.png?raw=true "VM ip")
-	> 
-
-	````PowerShell
-	# Point to IP Address of Domain Controller Created Earlier
-	$dns1 = New-AzureDns -Name 'ad-dc' -IPAddress '[Domain-Controller IP Address]'
-	
-    # Configuring VM to Automatically Join Domain
-	$advm1 = New-AzureVMConfig -Name 'advm1' -InstanceSize Small -ImageName $imgname | 
-		Add-AzureProvisioningConfig -WindowsDomain -Password '[YOUR-PASSWORD]' `
-	        -Domain 'contoso' -DomainPassword '[YOUR-PASSWORD]' `
-			 -DomainUserName 'administrator' -JoinDomain 'contoso.com' |
-		Set-AzureSubnet -SubnetNames 'AppSubnet' 
-   
-    # New Cloud Service with VNET and DNS settings
-    New-AzureVM -ServiceName '[SOMEUNIQUEAPPNAME]' -AffinityGroup 'adag' `
-							-VMs $advm1 -DnsSettings $dns1 -VNetName 'ADVNET' 
-	
-	````
-
-	> **Note:** The **Add-AzureProvisioningConfig** also takes a **-MachineObjectOU** parameter which if specified (requires the full distinguished name in AD) allows for setting group policy settings on all of the virtual machines in that container.
-
-
-    ![AD Architecture](images/ad-architecture.png?raw=true)
-    
-    _Resulting Architecture_
-
-1. Once the VM is provisioned, connect to the newly created virtual machine in the Windows Azure Portal by clicking on Virtual Machines, select the VM, and click **Connect** at the bottom.
-
-1. Open the Initial Configuration Tasks and verify the domain is _contoso.com_. 
-
-	![Initial configuration tasks](images/initial-configuration-tasks.png?raw=true "Initial configuration tasks")
-
-	_Initial configuration tasks_
-	
 
 ---
 
