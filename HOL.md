@@ -1,11 +1,11 @@
-﻿<a name="Deploy-AD-in-Windows-Azure" />
+<a name="Deploy-AD-in-Windows-Azure" />
 # Deploy Active Directory in Windows Azure #
 
 ---
 <a name="Overview" />
 ## Overview ##
 
-In this lab, you will deploy Active Directory in Windows Azure. In the demo environment, there already is a first domain controller running, so you will install a second domain controller.
+In this lab, you will create a new VM named DC01 from a Windows Server 2012 gallery image in Windows Azure and then deploy Active Directory on DC01. 
 
 When deploying Active Directory in Windows Azure, two aspects are important to point out.
 
@@ -17,10 +17,9 @@ Secondly, it is important to avoid the possibility of Active Directory database 
 ### Objectives ###
 
 In this hands-on lab, you will learn how to:
-
+- Create a new Virtual Machine from a gallery image
 - Configure Virtual Networking
-- Deploy a Domain Controller 
-- Create new Virtual Machines in the Domain
+- Promote the Virtual Machine to the first Domain Controller in a new forest. 
 
 <a name="Prerequisites"></a> 
 ### Prerequisites ###
