@@ -1,11 +1,11 @@
-<a name="Deploy-AD-in-Windows-Azure" />
+﻿<a name="Deploy-AD-in-Windows-Azure" />
 # Deploy Active Directory in Windows Azure #
 
 ---
 <a name="Overview" />
 ## Overview ##
 
-In this lab, you will create a new VM named DC01 from a Windows Server 2012 gallery image in Windows Azure and then deploy Active Directory on DC01. 
+In this lab, you will create a new Windows Server 2012 VM called DC02 in Windows Azure using the Windows Azure management console in your web browser and then deploy Active Directory using Server Manager on DC02. DC02 will be the first domain controller in a new forest.
 
 When deploying Active Directory in Windows Azure, two aspects are important to point out.
 
@@ -13,13 +13,14 @@ The first one is the networking configuration. Domain members and domain control
 
 Secondly, it is important to avoid the possibility of Active Directory database corruption. Active Directory assumes that it can write its database updates directly to disk. That means that you should place the Active Directory database files on a data disk that does not have write caching enabled.
 
-<a name='Objectives' />
+<a name="Objectives" /></a>
 ### Objectives ###
 
 In this hands-on lab, you will learn how to:
-- Create a new Virtual Machine from a gallery image
+
 - Configure Virtual Networking
-- Promote the Virtual Machine to the first Domain Controller in a new forest. 
+- Deploy a Domain Controller 
+- Create new Virtual Machines in 
 
 <a name="Prerequisites"></a> 
 ### Prerequisites ###
@@ -40,86 +41,56 @@ The Windows Azure PowerShell Cmdlets are required for this lab. If you have not 
 
 >**Note:** In order to run through the complete hands-on lab, you must have network connectivity. 
 
-<a name="Exercises" />
+<a name="Exercises" /></a>
 ## Exercises ##
 
-<a name="Exercise1" />
-### Exercise 1: Deploy Active Directory in Windows Azure ###
+This hands-on lab includes the following exercises:
 
-<a name="Ex1Task1" />
-#### Task 1 – Examine the current Domain Controller configuration ####
+1. [Configure Virtual Networking](#Exercise1)
+1. [Create a new virtual machine from the gallery image](#Exercise2)
+1. [Deploy a new domain controller in Windows Server 2012](#Exercise3)
 
-1. In the Windows Azure portal, in the **Virtual Machines** section, click the **DC01** name. _The DC01 page appears._
+<a name="Exercise1" /></a>
+### Exercise 1: Configure Virtual Networking ###
 
-	![Selecting the DC01 vm](./images/selecting-the-dc01-vm.png?raw=true "Selecting the DC01 vm")
+Running an Active Directory Domain requires persistent IP addresses and for clients of the Active Directory Domain to point to an AD enabled DNS server. The default internal DNS service (iDNS) in Windows Azure is not an acceptable solution because the IP address assigned to each virtual machine is not persistent. For this solution you will define a virtual network where you can assign the virtual machines to specific subnets. 
 
-	_Selecting the DC01 virtual machine_
+The network configuration used for this lab defines the following:
 
-1. On the DC01 page, select the **Configure** tab. _The DC01 VM is configured with Virtual Network named **domainvnet**, and a Subnet named **Subnet-1**, containing the IP range 10.0.0.0/24._
+- A Virtual Network Named domainvnet with an address prefix of: 10.0.0.0/16
+- A subnet named Subnet-1 with an address prefix of: 10.0.0.0/24
 
-	![Selecting the configure tab](./images/dc01-configure-tab.png?raw=true "Selecting the configure tab")
+Exercise 1 contains 2 tasks:
 
-	_Selecting the configure tab_
+1. Creating an Affinity Group 
+2. Creating a new Virtual Network
 
-1. On the Virtual Machines page, select the **DC01** virtual machine, and then on the toolbar, click the **Connect** icon. _The RDP file for DC01 is downloaded._
+<a name="Ex1Task1" /></a>
+#### Task 1 - Creating an Affinity Group ####
 
-	![Downloading the RDP file](./images/downloading-the-rdp-file.png?raw=true "Downloading the RDP file")
+The first task is to create an affinity group for the Virtual Network. 
 
-	_Downloading the RDP file_
+<h1>PLACEHOLDER<h1>
 
-1. In the Windows Security dialog box, enter the credentials for the DC01 virtual machine:
+<a name="Ex1Task2" /></a>
+#### Task 2 - Creating a new Virtual Network ####
 
-	| Field | Value |
-	|--------|--------|
-	| User account | **Contoso\Administrator** |
-	| Password | **Passw0rd!** |
- 
+The next step is to create a new virtual network to your subscription.
 
-	If a Remote Desktop Connection warning appears about the certificate name, click **Yes**.
+<h1>PLACEHOLDER<h1>
 
-	![Entering the credentials](./images/entering-the-credentials.png?raw=true "Entering the credentials")
+<a name="Exercise2" /></a>
+### Exercise 2: Create a new virtual machine from the gallery image ###
 
-	_Entering the credentials_
+You will now create a new virtual machine from a Windows Server 2012 gallery image called DC02.  This virtual machine will be used to create a domain controller in the next exercise. We will then create and provision a data disk which will be used in exercise 3 to place the AD database files.
 
-1. In the DC01 VM, use the **Windows-X C** command to open a Command Prompt window. 
+Exercise 2 contains 2 tasks:
 
-1. In the Command Prompt window, type, **ipconfig /all**, and then press **Enter**. _The domain controller uses DHCP to receive a dynamically assigned IP address (10.0.0.4) with a lifelong lease time. The DNS server is also assigned as 10.0.0.4._
+1. Create a new virtual machine
+1. Configure a new data disk on DC02
 
-	![Executing ipconfig](./images/executing-ipconfig.png?raw=true "Executing ipconfig")
-
-	_Executing ipconfig_
-
-
-<a name="Ex1Task2" />
-#### Task 2 – Configure Virtual Networking ####
-
-1. In the Windows Azure portal, on the **Networks** page, click the **domainvnet** name.
-
-	![Clicking the domainvnet](./images/clicking-the-domainvnet.png?raw=true "Clicking the domainvnet")
-	
-	_Clicking the domainvnet network_
-
-1. On the **domainvnet** page, select the **Configure** tab. _The domainvnet network currently has one subnet (Subnet-1 - 10.0.0.0/24), and uses DNS server DC01 10.0.0.4._
-
-	![domainvnet network information](./images/domainvnet-network-information.png?raw=true "domainvnet network information")
-
-	_domainvnet network information_
-
-1. Click the **add subnet** button. _A new subnet is created: Subnet-2 - 10.0.1.0/24. You can add additional virtual machines in the first subnet. For the lab exercise, we will define a second subnet._
-
-	![Clicking the add subnet button](./images/clicking-the-add-subnet-button.png?raw=true "Clicking the add subnet button")
-
-	_Clicking the add subnet button_
-
-1. On the toolbar, click the **Save** button.
-_The network configuration is saved. Virtual machines that are assigned to different subnets within the same virtual network can connect to each other._
-
-	![Clicking the save button](./images/clicking-the-save-button.png?raw=true "Clicking the save button")
-
-	_Clicking the save button_
-
-<a name="Ex1Task3" />
-#### Task 3 - Create a new Virtual Machine with a data disk ####
+<a name="Ex2Task1" /></a>
+#### Task 1 - Create a new Virtual Machine with a data disk ####
 
 1. On the Start menu, start typing **ise**, and then click **Windows PowerShell ISE**. _For these steps, we will use the PowerShell Integrated Scripting Environment._
 
@@ -185,14 +156,14 @@ _The network configuration is saved. Virtual machines that are assigned to diffe
 
 	_Selecting the endpoints tab_
 
-<a name="Ex1Task4" />
-#### Task 4 - Configure a new data disk ####
+<a name="Ex2Task2" /></a>
+#### Task 2 - Configure a new data disk ####
 
 1. In the Windows Azure console, in the **Virtual Machines** section, wait a few moments until the status of **DC02** is **Running**.
 
 1. Select the **DC02** virtual machine, and then on the toolbar, click the **Connect** icon.
 
-	![Connecting to the DC02 VM](./images/connecting-to-the-dc02-vm.png?raw=true "Connecting to the DC02 VM")
+	![Connecting to the DC02 VM](./images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC02 VM")
 
 	_Connecting to the DC02 virtual machine_
 
@@ -263,20 +234,18 @@ _The network configuration is saved. Virtual machines that are assigned to diffe
 
 1. Close the Computer Management console.
 
-<a name="Ex1Task5" />
-#### Task 5 - Create a Domain Controller ####
+<a name="Exercise3" /></a>
+### Exercise 3: Deploy a new domain controller in Windows Server 2012 ###
+You have just created a base virtual machine called DC02, attached the necessary data disk, and provisioned the disk. We are going to login to DC02 to install and configure active directory and then verify the install was successful.
 
-1. In the DC02 VM, use the Windows X C command to open a Command Prompt window. In the Command Prompt Window, type **ipconfig /all**, and then press **Enter**. _The new VM uses IP address 10.0.1.4, and DNS server address 10.0.0.4._
+Exercise 3 contains 3 tasks:
 
-	![Executing ipconfig](./images/executing-ipconfig.png?raw=true "Executing ipconfig")
+1. Install the Active Directory Domain Services Role 
+1. Configure the Active Directory Domain Services Role
+1. Verify the Domain Controller Installed Successfully
 
-	_Executing ipconfig_
-
-1.  In the Command Prompt window, type **ping 10.0.0.4**, and then press **Enter**. _The replies from 10.0.0.4 confirm that the new VM can connect to DC01._
-
-	![Pinging the DC01 VM](./images/pinging-the-dc01-vm.png?raw=true "Pinging the DC01 VM")
-
-	_Pinging the DC01 virtual machine_
+<a name="Ex3Task1" /></a>
+#### Task 1 - Install the Active Directory Domain Services Role ####
 
 1. Open a PowerShell window, and type the following command:
 
@@ -290,6 +259,8 @@ _The network configuration is saved. Virtual machines that are assigned to diffe
 
 	_Adding the Active Directory feature_
 
+<a name="Ex3Task2" /></a>
+#### Task 2 - Configure the Active Directory Domain Services Role ####
 1. When the feature installation has completed, type the following single command to promote the domain controller:
 
 	````PowerShell
@@ -317,6 +288,9 @@ _The network configuration is saved. Virtual machines that are assigned to diffe
 
 	_Configuring the administrator password_
 
+<a name="Ex3Task3" /></a>
+#### Task 3 - Verify the Domain Controller Installed Successfully ####
+
 1. Wait two minutes for the DC02 VM to restart.
 In the Azure portal, on the Virtual Machines page, select **DC02**, and on the toolbar, click the **Connect** icon.
 
@@ -342,9 +316,6 @@ In the Azure portal, on the Virtual Machines page, select **DC02**, and on the t
 	````
 
 	_This output of the command confirms that DC02 was successfully promoted to domain controller._
-
-
----
 
 <a name='Summary'/>
 ## Summary ##
