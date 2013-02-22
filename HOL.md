@@ -163,7 +163,7 @@ Exercise 2 contains 2 tasks:
 
 1. Select the **DC02** virtual machine, and then on the toolbar, click the **Connect** icon.
 
-	![Connecting to the DC02 VM](./images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC02 VM")
+	![Connecting to the DC02 VM](./images/connecting-to-the-dc02-vm.png?raw=true "Connecting to the DC02 VM")
 
 	_Connecting to the DC02 virtual machine_
 
