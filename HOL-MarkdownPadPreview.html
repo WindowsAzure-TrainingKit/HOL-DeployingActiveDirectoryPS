@@ -1,0 +1,773 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>HOL.md</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+body{
+    margin: 0 auto;
+    font-family: Georgia, Palatino, serif;
+    color: #444444;
+    line-height: 1;
+    max-width: 960px;
+    padding: 5px;
+}
+h1, h2, h3, h4 {
+    color: #111111;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, p {
+    margin-bottom: 16px;
+    padding: 0;
+}
+h1 {
+    font-size: 28px;
+}
+h2 {
+    font-size: 22px;
+    margin: 20px 0 6px;
+}
+h3 {
+    font-size: 21px;
+}
+h4 {
+    font-size: 18px;
+}
+h5 {
+    font-size: 16px;
+}
+a {
+    color: #0099ff;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+a:hover {
+    text-decoration: none;
+    color: #ff6600;
+}
+a:visited {
+    color: purple;
+}
+ul, ol {
+    padding: 0;
+    margin: 0;
+}
+li {
+    line-height: 24px;
+    margin-left: 44px;
+}
+li ul, li ul {
+    margin-left: 24px;
+}
+p, ul, ol {
+    font-size: 14px;
+    line-height: 20px;
+    max-width: 540px;
+}
+pre {
+    padding: 0px 24px;
+    max-width: 800px;
+    white-space: pre-wrap;
+}
+code {
+    font-family: Consolas, Monaco, Andale Mono, monospace;
+    line-height: 1.5;
+    font-size: 13px;
+}
+aside {
+    display: block;
+    float: right;
+    width: 390px;
+}
+blockquote {
+    border-left:.5em solid #eee;
+    padding: 0 2em;
+    margin-left:0;
+    max-width: 476px;
+}
+blockquote  cite {
+    font-size:14px;
+    line-height:20px;
+    color:#bfbfbf;
+}
+blockquote cite:before {
+    content: '\2014 \00A0';
+}
+
+blockquote p {  
+    color: #666;
+    max-width: 460px;
+}
+hr {
+    width: 540px;
+    text-align: left;
+    margin: 0 auto 0 0;
+    color: #999;
+}
+
+button,
+input,
+select,
+textarea {
+  font-size: 100%;
+  margin: 0;
+  vertical-align: baseline;
+  *vertical-align: middle;
+}
+button, input {
+  line-height: normal;
+  *overflow: visible;
+}
+button::-moz-focus-inner, input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+input[type=checkbox], input[type=radio] {
+  cursor: pointer;
+}
+/* override default chrome & firefox settings */
+input:not([type="image"]), textarea {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+label,
+input,
+select,
+textarea {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: normal;
+  margin-bottom: 18px;
+}
+input[type=checkbox], input[type=radio] {
+  cursor: pointer;
+  margin-bottom: 0;
+}
+input[type=text],
+input[type=password],
+textarea,
+select {
+  display: inline-block;
+  width: 210px;
+  padding: 4px;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  height: 18px;
+  color: #808080;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+select, input[type=file] {
+  height: 27px;
+  line-height: 27px;
+}
+textarea {
+  height: auto;
+}
+
+/* grey out placeholders */
+:-moz-placeholder {
+  color: #bfbfbf;
+}
+::-webkit-input-placeholder {
+  color: #bfbfbf;
+}
+
+input[type=text],
+input[type=password],
+select,
+textarea {
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(82, 168, 236, 0.8);
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+/* buttons */
+button {
+  display: inline-block;
+  padding: 4px 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-color: #0064cd;
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
+  background-image: -moz-linear-gradient(top, #049cdb, #0064cd);
+  background-image: -ms-linear-gradient(top, #049cdb, #0064cd);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
+  background-image: -webkit-linear-gradient(top, #049cdb, #0064cd);
+  background-image: -o-linear-gradient(top, #049cdb, #0064cd);
+  background-image: linear-gradient(top, #049cdb, #0064cd);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border: 1px solid #004b9a;
+  border-bottom-color: #003f81;
+  -webkit-transition: 0.1s linear all;
+  -moz-transition: 0.1s linear all;
+  transition: 0.1s linear all;
+  border-color: #0064cd #0064cd #003f81;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+button:hover {
+  color: #fff;
+  background-position: 0 -15px;
+  text-decoration: none;
+}
+button:active {
+  -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+/* CSS stylesheet is based on Kevin Burke's Markdown.css project (http://kevinburke.bitbucket.org/markdowncss) */
+</style>
+</head>
+<body>
+<p><a name="Deploy-AD-in-Windows-Azure" /></p>
+
+<h1>Deploy Active Directory in Windows Azure</h1>
+
+<hr />
+
+<p><a name="Overview" /></a></p>
+
+<h2>Overview</h2>
+
+<p>In this lab, you will create a new Windows Server 2012 VM called DC01 in Windows Azure using the Windows Azure management console in your web browser and then deploy Active Directory using Server Manager on DC01. DC01 will be the first domain controller in a new forest.</p>
+
+<p>When deploying Active Directory in Windows Azure, two aspects are important to point out.</p>
+
+<p>The first one is the networking configuration. Domain members and domain controllers need to find the DNS server hosting the domain DNS information. You will configure the Azure network configuration, so that it the correct DNS server is configured.</p>
+
+<p>Secondly, it is important to avoid the possibility of Active Directory database corruption. Active Directory assumes that it can write its database updates directly to disk. That means that you should place the Active Directory database files on a data disk that does not have write caching enabled.</p>
+
+<p><a name="Objectives" /></a></p>
+
+<h3>Objectives</h3>
+
+<p>In this hands-on lab, you will learn how to:</p>
+
+<ul>
+<li>Configure Virtual Networking</li>
+<li>Deploy a Domain Controller </li>
+<li>Create new Virtual Machines in </li>
+</ul>
+
+<p><a name="Prerequisites"></a> </p>
+
+<h3>Prerequisites</h3>
+
+<p>The following is required to complete this hands-on lab:</p>
+
+<ul>
+<li><a href="http://microsoft.com/powershell/">Windows PowerShell 2.0</a></li>
+<li><a href="http://msdn.microsoft.com/en-us/library/windowsazure/jj156055">Windows Azure PowerShell CmdLets</a></li>
+<li>A Windows Azure subscription with the Virtual Machines Preview enabled - <a href="http://aka.ms/WATK-FreeTrial">sign up for a free trial</a></li>
+</ul>
+
+<blockquote>
+  <p><strong>Note:</strong> In order to run through the complete hands-on lab, you must have network connectivity. </p>
+</blockquote>
+
+<p><a name='gettingstarted' /></a></p>
+
+<h3>Getting Started: Obtaining Subscription's Credentials</h3>
+
+<p>In order to complete this lab, you will need your subscription’s secure credentials. Windows Azure lets you download a Publish Settings file with all the information required to manage your account in your development environment.</p>
+
+<h4>Task 1 - Downloading and Importing a Publish-settings File</h4>
+
+<blockquote>
+  <p><strong>Note:</strong> If you have done these steps in a previous lab on the same computer you can move on to Exercise 1.</p>
+</blockquote>
+
+<p>In this task, you will log on to the Windows Azure Portal and download the publish-settings file. This file contains the secure credentials and additional information about your Windows Azure Subscription to use in your development environment. Then, you will import this file using the Windows Azure Cmdlets in order to install the certificate and obtain the account information.</p>
+
+<ol>
+<li><p>Open an Internet Explorer browser and go to <a href="https://windows.azure.com/download/publishprofile.aspx">https://windows.azure.com/download/publishprofile.aspx</a>.</p></li>
+<li><p>Sign in using the <strong>Microsoft Account</strong> associated with your <strong>Windows Azure</strong> account.</p></li>
+<li><p><strong>Save</strong> the publish-settings file to your local machine.</p>
+
+<p><img src="images/downloading-publish-settings-file.png?raw=true" alt="Downloading publish-settings file" title="Downloading publish-settings file" /></p>
+
+<p><em>Downloading publish-settings file</em></p>
+
+<blockquote>
+  <p><strong>Note:</strong> The download page shows you how to import the publish-settings file using Visual Studio Publish box. This lab will show you how to import it using the Windows Azure PowerShell Cmdlets instead.</p>
+</blockquote></li>
+<li><p>In the start menu under <strong>Windows Azure</strong>, right-click <strong>Windows Azure PowerShell</strong> and choose <strong>Run as Administrator</strong>.</p></li>
+<li><p>Change the PowerShell execution policy to <strong>RemoteSigned</strong>. When asked to confirm press <strong>Y</strong> and then <strong>Enter</strong>.</p>
+
+<p><!-- mark:1 -->
+<code>PowerShell
+Set-ExecutionPolicy RemoteSigned
+</code></p>
+
+<blockquote>
+  <p><strong>Note:</strong> The Set-ExecutionPolicy cmdlet enables you to determine which Windows PowerShell scripts (if any) will be allowed to run on your computer. Windows PowerShell has four different execution policies:</p>
+  
+  <ul>
+  <li><em>Restricted</em> - No scripts can be run. Windows PowerShell can be used only in interactive mode.</li>
+  <li><em>AllSigned</em> - Only scripts signed by a trusted publisher can be run.</li>
+  <li><em>RemoteSigned</em> - Downloaded scripts must be signed by a trusted publisher before they can be run.</li>
+  <li><em>Unrestricted</em> - No restrictions; all Windows PowerShell scripts can be run.</li>
+  </ul>
+  
+  <p>For more information about Execution Policies refer to this TechNet article: <a href="http://technet.microsoft.com/en-us/library/ee176961.aspx">http://technet.microsoft.com/en-us/library/ee176961.aspx</a></p>
+</blockquote></li>
+<li><p>The following script imports your publish-settings file and generates an XML file with your account information. You will use these values during the lab to manage your Windows Azure Subscription. Replace the placeholder with your publish-setting file’s path and execute the script.</p>
+
+<p><!-- mark:1 -->
+<code>PowerShell
+Import-AzurePublishSettingsFile '[YOUR-PUBLISH-SETTINGS-PATH]'
+</code></p></li>
+<li><p>Execute the following commands and take note of the Subscription name and the storage account name you will use for the exercise.</p>
+
+<p><!-- mark:1-3 -->
+<code>PowerShell
+Get-AzureSubscription | select SubscriptionName
+Get-AzureStorageAccount | select StorageAccountName
+</code></p></li>
+<li><p>If you do NOT have a storage account returned above you should create one first.</p>
+
+<ol>
+<li><p>Run the following to determine the data center to create your storage account in. Ensure you pick a data center that shows support for PersistentVMRole. </p>
+
+<p><code>PowerShell
+Get-AzureLocation
+</code></p></li>
+<li><p>Create your storage account: </p>
+
+<p><code>PowerShell
+New-AzureStorageAccount -StorageAccountName '[YOUR-SUBSCRIPTION-NAME]' -Location '[DC-LOCATION]'
+</code></p></li>
+</ol></li>
+<li><p>Execute the following command to set your current storage account for your subscription.</p>
+
+<p><!-- mark:1 -->
+<code>PowerShell
+Set-AzureSubscription -SubscriptionName '[YOUR-SUBSCRIPTION-NAME]' -CurrentStorageAccount '[YOUR-STORAGE-ACCOUNT]'
+</code></p></li>
+</ol>
+
+<p><a name="Exercises" /></a></p>
+
+<h2>Exercises</h2>
+
+<p>This hands-on lab includes the following exercises:</p>
+
+<ol>
+<li><a href="#Exercise1">Configure Virtual Networking</a></li>
+<li><a href="#Exercise2">Create a new virtual machine from the gallery image</a></li>
+<li><a href="#Exercise3">Deploy a new domain controller in Windows Server 2012</a></li>
+</ol>
+
+<p><a name="Exercise1" /></a></p>
+
+<h3>Exercise 1: Configure Virtual Networking</h3>
+
+<p>Running an Active Directory Domain requires persistent IP addresses and for clients of the Active Directory Domain to point to an AD enabled DNS server. The default internal DNS service (iDNS) in Windows Azure is not an acceptable solution because the IP address assigned to each virtual machine is not persistent. For this solution you will define a virtual network where you can assign the virtual machines to specific subnets. </p>
+
+<p>The network configuration used for this lab defines the following:</p>
+
+<ul>
+<li>A Virtual Network Named domainvnet with an address prefix of: 10.0.0.0/16</li>
+<li>A subnet named Subnet-1 with an address prefix of: 10.0.0.0/24</li>
+</ul>
+
+<p>Exercise 1 contains 2 tasks:</p>
+
+<ol>
+<li>Creating an Affinity Group </li>
+<li>Creating a new Virtual Network</li>
+</ol>
+
+<p><a name="Ex1Task1" /></a></p>
+
+<h4>Task 1 - Creating an Affinity Group</h4>
+
+<p>The first task is to create an affinity group for the Virtual Network. </p>
+
+<ol>
+<li><p>On the Start menu, start typing <strong>ise</strong>, and then click <strong>Windows PowerShell ISE</strong>. <em>For this task and most of this HOL, we will use the PowerShell Integrated Scripting Environment.</em></p>
+
+<p><img src="./images/opening-windows-powershell-ise.png?raw=true" alt="Opening Windows Powershell ISE" title="Opening Windows Powershell ISE" /></p>
+
+<p><em>Opening Windows Powershell ISE</em></p></li>
+<li><p>In the PowerShell ISE window, type the following command:</p>
+
+<p>````PowerShell</p>
+
+<h1>Creates the affinity group</h1>
+
+<p>New-AzureAffinityGroup -Location "<em>LOCATION</em>" -Name agdomain</p>
+
+<blockquote>
+  <p><strong>Note:</strong> For the <em>LOCATION</em> variable above, please replace it with the exact text below (minus the number) from the datacenter closest to you:</p>
+  
+  <ol>
+  <li>West US</li>
+  <li>East US</li>
+  <li>East Asia</li>
+  <li>South East Asia</li>
+  <li>North Europe</li>
+  <li>West Europe</li>
+  </ol>
+</blockquote></li>
+</ol>
+
+<p><a name="Ex1Task2" /></a></p>
+
+<h4>Task 2 - Creating a new Virtual Network</h4>
+
+<p>The next step is to create a new virtual network to your subscription.</p>
+
+<ol>
+<li><p>First create an XML file called <strong>domainnet.xml</strong> on your local host where you are running the PowerShell ISE with the following contents:</p>
+
+<p>````XML</p>
+
+<h1>Creates the domainvnet xml file</h1>
+
+<p><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;NetworkConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/ServiceHosting/2011/07/NetworkConfiguration"&gt;
+  &lt;VirtualNetworkConfiguration&gt;
+    &lt;Dns&gt;
+      &lt;DnsServers&gt;
+        &lt;DnsServer name="DC01" IPAddress="10.0.0.4" /&gt;
+      &lt;/DnsServers&gt;
+    &lt;/Dns&gt;
+    &lt;VirtualNetworkSites&gt;
+      &lt;VirtualNetworkSite name="domainvnet" AffinityGroup="agdomain"&gt;
+        &lt;AddressSpace&gt;
+          &lt;AddressPrefix&gt;10.0.0.0/16&lt;/AddressPrefix&gt;
+        &lt;/AddressSpace&gt;
+        &lt;Subnets&gt;
+          &lt;Subnet name="Subnet-1"&gt;
+            &lt;AddressPrefix&gt;10.0.0.0/24&lt;/AddressPrefix&gt;
+          &lt;/Subnet&gt;
+        &lt;/Subnets&gt;
+        &lt;DnsServersRef&gt;
+          &lt;DnsServerRef name="DC01" /&gt;
+        &lt;/DnsServersRef&gt;
+      &lt;/VirtualNetworkSite&gt;
+    &lt;/VirtualNetworkSites&gt;
+  &lt;/VirtualNetworkConfiguration&gt;
+&lt;/NetworkConfiguration&gt;
+</code></p></li>
+<li><p>In the PowerShell ISE window, type the following command:</p>
+
+<p>````PowerShell</p>
+
+<h1>Creates the virtual network from XML file</h1>
+
+<p>Set-AzureVNetConfig -ConfigurationPath <em>c:\yourpath</em>\domainvnet.xml</p>
+
+<blockquote>
+  <p><strong>Note:</strong> Replace <em>c:\yourpath</em> above with the path to where you saved the domainnet.xml file in the previous step.</p>
+</blockquote></li>
+<li><p>Open a browser a go to <a href="https://manage.windowsazure.com/">https://manage.windowsazure.com/</a>. When prompted, login with your <strong>Windows Azure</strong> credentials. In the Windows Azure portal, click <strong>Networks</strong>, and then click <strong>domainvnet</strong>.  You can see the virtual network has been added that uses the affinity group you created earlier.</p>
+
+<p><img src="./images/verify-the-virtual-network-creation.png?raw=true" alt="Verify The Virtual Network Creation" title="Verify The Virtual Network Creation" /></p>
+
+<p><em>Verify The Virtual Network Creation</em></p></li>
+</ol>
+
+<p><a name="Exercise2" /></a></p>
+
+<h3>Exercise 2: Create a new virtual machine from the gallery image</h3>
+
+<p>You will now create a new virtual machine from a Windows Server 2012 gallery image called DC01.  This virtual machine will be used to create a domain controller in the next exercise. We will then create and provision a data disk which will be used in exercise 3 to place the AD database files.</p>
+
+<p>Exercise 2 contains 2 tasks:</p>
+
+<ol>
+<li>Create a new virtual machine</li>
+<li>Configure a new data disk on DC01</li>
+</ol>
+
+<p><a name="Ex2Task1" /></a></p>
+
+<h4>Task 1 - Create a new Virtual Machine with a data disk</h4>
+
+<ol>
+<li><p>In the PowerShell ISE window, type the following command:</p>
+
+<p>````PowerShell</p>
+
+<h1>Get a list of available gallery images</h1>
+
+<p>Get-AzureVMImage  |  ft ImageName
+````</p>
+
+<p><img src="./images/retriving-the-vm-images.png?raw=true" alt="Retriving the VM images" title="Retriving the VM images" /></p>
+
+<p><em>Retriving the virtual machine images</em></p>
+
+<blockquote>
+  <p><strong>Note:</strong> <em>The list of available image files is displayed. In this task, we will use the latest Windows Server 2012 image, which is a699494373c04fc0bc8f2bb1389d6106</em><em>Windows-Server-2012-Datacenter-201301.01-en.us-30GB.vhd.</em></p>
+</blockquote></li>
+<li><p>In the PowerShell ISE window, type or copy the following commands.</p>
+
+<blockquote>
+  <p><strong>Note:</strong> Make sure to replace NNNN in the $svcname variable below with the actual hosted service name you used earlier.</p>
+</blockquote>
+
+<p>````PowerShell</p>
+
+<h1>Defines image name</h1>
+
+<p>$imgname = "a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-Datacenter-201301.01-en.us-30GB.vhd"</p>
+
+<h1>Defines configuration settings</h1>
+
+<p>$vmname = "DC01"
+$svcname = "NNNN"
+$password = "Passw0rd!"</p>
+
+<h1>Defines network settings</h1>
+
+<p>$subnetname = "Subnet-1"</p>
+
+<h1>Defines VM configuration, including size, attached datadisk, and subnet</h1>
+
+<p>$dcvm = New-AzureVMConfig  -Name  $vmname  -ImageName  $imgname -InstanceSize "Small"  |
+    Add-AzureProvisioningConfig  -Windows  -Password  $password  |
+    Add-AzureDataDisk  -CreateNew  -DiskSizeInGB  10  -DiskLabel "ADdisk"  -LUN 0  |
+    Set-AzureSubnet  -SubnetName  $subnetname</p>
+
+<h1>Creates new VM in existing hosted service</h1>
+
+<p>New-AzureVM  -ServiceName  $svcname  -AffinityGroup 'agdomain' -VNetName 'domainvnet' -VMs  $dcvm
+````</p>
+
+<p><img src="./images/executing-the-powershell-commands.png?raw=true" alt="Executing the powershell commands" title="Executing the powershell commands" /></p>
+
+<p><em>Executing the powershell commands</em></p>
+
+<blockquote>
+  <p><strong>Note:</strong> The <strong>New-AzureVM</strong> cmdlet will create a new hosted service when the -Location or -AffinityGroup parameter is specified, or will use an existing hosted service when those parameters are not specified. </p>
+</blockquote></li>
+<li><p>In the Windows Azure console, in the <strong>Virtual Machines</strong> section, wait a few minutes until the <strong>DC01</strong> virtual machine appears (or press F5 to refresh the display).</p></li>
+<li><p>Click the <strong>DC01</strong> name.</p>
+
+<p><img src="./images/connecting-to-the-dc01-vm.png?raw=true" alt="Connecting to the DC01 VM" title="Connecting to the DC01 VM" /></p>
+
+<p><em>Connecting to the DC01 virtual machine</em></p></li>
+<li><p>On the DC01 page, select the <strong>Endpoints</strong> tab. <em>Notice that by default the PowerShell cmdlet will add an RDP endpoint for port 3389. Therefore, we did not specify this endpoint configuration in the PowerShell commands.</em></p></li>
+</ol>
+
+<p><a name="Ex2Task2" /></a></p>
+
+<h4>Task 2 - Configure a new data disk</h4>
+
+<ol>
+<li><p>In the Windows Azure console, in the <strong>Virtual Machines</strong> section, wait a few moments until the status of <strong>DC01</strong> is <strong>Running</strong>.</p></li>
+<li><p>Select the <strong>DC01</strong> virtual machine, and then on the toolbar, click the <strong>Connect</strong> icon.</p>
+
+<p><img src="./images/connecting-to-the-dc01-vm.png?raw=true" alt="Connecting to the DC01 VM" title="Connecting to the DC01 VM" /></p>
+
+<p><em>Connecting to the DC01 virtual machine</em></p></li>
+<li><p>Open the DC01.rdp file, and connect to the virtual machine. To log on, use credentials:</p>
+
+<p>| Field | Value |
+|--------|--------|
+| Account | <strong>Administrator</strong> |
+| Password | <strong>Passw0rd!</strong> |</p>
+
+<p><img src="./images/logging-on-to-the-dc02-vm.png?raw=true" alt="Logging on to the DC01 VM" title="Logging on to the DC01 VM" /></p>
+
+<p><em>Logging on to the DC01 virtual machine</em></p></li>
+<li><p>On DC01, in <strong>Server Manager</strong>, on the <strong>Tools</strong> menu, click <strong>Computer Management</strong>. <em>The Computer Management console opens.</em></p>
+
+<p><img src="./images/opening-the-computer-manager-console.png?raw=true" alt="Opening the Computer Manager console" title="Opening the Computer Manager console" /></p>
+
+<p><em>Opening the Computer Manager console</em></p></li>
+<li><p>In the Computer Management console, in the left pane, select <strong>Disk Management</strong>. <em>Disk Management recognizes that a new initialize disk is added to the computer, and it will show the Initialize Disk dialog box.</em></p>
+
+<p><img src="./images/selecting-disk-management.png?raw=true" alt="Selecting Disk Management" title="Selecting Disk Management" /></p>
+
+<p><em>Selecting Disk Management</em></p></li>
+<li><p>In the Initialize Disk dialog box, click <strong>OK</strong>. <em>The new Disk 2 is initialized.</em></p>
+
+<p><img src="./images/initializing-the-disk-2.png?raw=true" alt="Initializing the disk 2" title="Initializing the disk 2" /></p>
+
+<p><em>Initializing the disk 2</em></p></li>
+<li><p>On Disk 2, right-click the <strong>Unallocated</strong> space, and then click <strong>New Simple Volume</strong>. <em>The New Simple Volume Wizard opens.</em></p>
+
+<p><img src="./images/formating-the-unallocated-space.png?raw=true" alt="Formating the unallocated space" title="Formating the unallocated space" /></p>
+
+<p><em>Formating the unallocated space</em></p></li>
+<li><p>In the new Simple Volume Wizard, click <strong>Next</strong>.</p>
+
+<p><img src="./images/using-the-simple-volume-wizard.png?raw=true" alt="Using the Simple Volume Wizard" title="Using the Simple Volume Wizard" /></p>
+
+<p><em>Using the Simple Volume Wizard</em></p></li>
+<li><p>On the Specify Volume Size page, click <strong>Next</strong>. <em>This means that the entire available space (10237 MB) will become a new volume.</em></p>
+
+<p><img src="./images/specifing-the-volume-size.png?raw=true" alt="Specifing the volume size" title="Specifing the volume size" /></p>
+
+<p><em>Specifing the volume size</em></p></li>
+<li><p>On the Assign Drive Letter or Path page, ensure drive letter <strong>F</strong> is selection, and then click <strong>Next</strong>.</p>
+
+<p><img src="./images/assigning-the-drive-letter.png?raw=true" alt="Assigning the drive letter" title="Assigning the drive letter" /></p>
+
+<p><em>Assigning the drive letter</em></p></li>
+<li><p>On the Format Partition page, in the <strong>Volume Label</strong> text box, type <strong>AD DS Data</strong>, and then click <strong>Next</strong>.</p>
+
+<p><img src="./images/specifing-the-volume-label.png?raw=true" alt="Specifing the volume label" title="Specifing the volume label" /></p>
+
+<p><em>Specifing the volume label</em></p></li>
+<li><p>On the Completing the New Simple Volume Wizard page, click <strong>Finish</strong>. <em>Windows will quick format the disk, and assign drive letter F:.</em></p>
+
+<p><img src="./images/completing-the-wizard.png?raw=true" alt="Completing the wizard" title="Completing the wizard" /></p>
+
+<p><em>Completing the wizard</em></p></li>
+<li><p>Close the Computer Management console.</p></li>
+</ol>
+
+<p><a name="Exercise3" /></a></p>
+
+<h3>Exercise 3: Deploy a new domain controller in Windows Server 2012</h3>
+
+<p>You have just created a base virtual machine called DC01, attached the necessary data disk, and provisioned the disk. We are going to login to DC01 to install and configure active directory and then verify the install was successful.</p>
+
+<p>Exercise 3 contains 3 tasks:</p>
+
+<ol>
+<li>Install the Active Directory Domain Services Role </li>
+<li>Configure the Active Directory Domain Services Role</li>
+<li>Verify the Domain Controller Installed Successfully</li>
+</ol>
+
+<p><a name="Ex3Task1" /></a></p>
+
+<h4>Task 1 - Install the Active Directory Domain Services Role</h4>
+
+<ol>
+<li><p>Open a PowerShell window, and type the following command:</p>
+
+<p><code>PowerShell
+Add-WindowsFeature -Name AD-Domain-Services  -IncludeManagementTools
+</code></p>
+
+<p><em>Windows is installing the Active Directory Domain Services role.</em></p>
+
+<p><img src="./images/adding-the-ad-feature.png?raw=true" alt="Adding the AD feature" title="Adding the AD feature" /></p>
+
+<p><em>Adding the Active Directory feature</em></p></li>
+</ol>
+
+<p><a name="Ex3Task2" /></a></p>
+
+<h4>Task 2 - Configure the Active Directory Domain Services Role</h4>
+
+<ol>
+<li><p>When the feature installation has completed, type the following single command to promote the domain controller:</p>
+
+<p><code>PowerShell
+Install-ADDSForest  -DomainName "contoso.com"  -SiteName "Default-First-Site-Name" -InstallDns:$true  -NoGlobalCatalog:$false  -Credential (Get-Credential)  -DatabasePath "F:\NTDS"  -LogPath "F:\NTDS"  -SysvolPath "F:\SYSVOL"  -NoRebootOnCompletion:$false  -Force:$true
+</code></p>
+
+<p><em>The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is a data disk we added earlier, and does not have caching enabled.</em></p>
+
+<p><img src="./images/promoting-the-domain-controller-with-powershell.png?raw=true" alt="Promoting the domain controller with powershell " title="Promoting the domain controller with powershell" /></p></li>
+<li><p>In the Credential dialog box, use the following credentials:</p>
+
+<p>| Field | Value |
+|--------|--------|
+| User account | <strong>Contoso\Administrator</strong> |
+| Password | <strong>Passw0rd!</strong> |</p>
+
+<p><img src="./images/using-administrator-credentials.png?raw=true" alt="Using administrator credentials" title="Using administrator credentials" /></p>
+
+<p><em>Using administrator credentials</em></p></li>
+<li><p>At the <strong>SafeModeAdministratorPassword</strong> prompt and the <strong>Confirm SafeModeAdministratorPassword</strong> prompt, type <strong>Passw0rd!</strong>, and then press <strong>Enter</strong>. <em>The computer is promoted to domain controller. After a few moments, the DC01 VM will restart. You will lose the connection to the restarting VM.</em></p>
+
+<p><img src="./images/configuring-the-administrator-password.png?raw=true" alt="Configuring the administrator password" title="Configuring the administrator password" /></p>
+
+<p><em>Configuring the administrator password</em></p></li>
+</ol>
+
+<p><a name="Ex3Task3" /></a></p>
+
+<h4>Task 3 - Verify the Domain Controller Installed Successfully</h4>
+
+<ol>
+<li><p>Wait two minutes for the DC01 VM to restart.
+In the Azure portal, on the Virtual Machines page, select <strong>DC01</strong>, and on the toolbar, click the <strong>Connect</strong> icon.</p>
+
+<p><img src="./images/connecting-to-the-dc01-vm.png?raw=true" alt="Connecting to the DC01 VM" title="Connecting to the DC01 VM" /></p>
+
+<p><em>Connecting to the DC01 virtual machine</em></p></li>
+<li><p>Open the DC01.rdp file, and connect to the virtual machine. To log on, use credentials:</p>
+
+<p>| Field | Value |
+|--------|--------|
+| User account | <strong>Contoso\Administrator</strong> |
+| Password | <strong>Passw0rd!</strong> |</p>
+
+<p><img src="./images/connecting-to-the-vm.png?raw=true" alt="Connecting to the VM" title="Connecting to the VM" /></p>
+
+<p><em>Connecting to the virtual machine</em></p></li>
+<li><p>To verify that DC01 is working properly, run the following command:</p>
+
+<p><code>PowerShell
+dcdiag.exe
+</code></p>
+
+<p><em>This output of the command confirms that DC01 was successfully promoted to domain controller.</em></p></li>
+</ol>
+
+<p><a name='Summary'/></p>
+
+<h2>Summary</h2>
+
+<p>In this lab, you walked through the steps of deploying a new Active Directory Domain using Windows Azure virtual machines and a simple virtual network. This lab also demonstrated how once in place virtual machines could be provisioned joined to the domain at boot time.</p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
