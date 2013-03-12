@@ -19,8 +19,9 @@ Secondly, it is important to avoid the possibility of Active Directory database 
 In this hands-on lab, you will learn how to:
 
 - Configure Virtual Networking
-- Deploy a Domain Controller 
-- Create new Virtual Machines in 
+- Create new Virtual Machines from Gallery Images
+- Deploy a Domain Controller
+
 
 <a name="Prerequisites"></a> 
 ### Prerequisites ###
