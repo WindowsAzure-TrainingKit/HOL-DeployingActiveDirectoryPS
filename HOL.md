@@ -1,5 +1,5 @@
 <a name="Deploy-AD-in-Windows-Azure" />
-# Deploy Active Directory in Windows Azure #
+# Deploy Active Directory in Windows Azure using PowerShell#
 
 ---
 <a name="Overview" /></a>
