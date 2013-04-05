@@ -42,6 +42,7 @@ The following is required to complete this hands-on lab:
 
 In order to complete this lab, you will need your subscription’s secure credentials. Windows Azure lets you download a Publish Settings file with all the information required to manage your account in your development environment.
 
+<a name='Ex1Task1' /></a>
 #### Task 1 - Downloading and Importing a Publish-settings File ####
 
 > **Note:** If you have done these steps in a previous lab on the same computer you can move on to Exercise 1.
