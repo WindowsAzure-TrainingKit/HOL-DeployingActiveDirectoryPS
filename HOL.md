@@ -56,7 +56,7 @@ In this task, you will log on to the Windows Azure Portal and download the publi
 
 1.	**Save** the publish-settings file to your local file system.
 
-	![Downloading publish-settings file](images/downloading-publish-settings-file.png?raw=true 'Downloading publish-settings file')
+	![Downloading publish-settings file](Images/downloading-publish-settings-file.png?raw=true 'Downloading publish-settings file')
 
 	_Downloading publish-settings file_
 
@@ -149,7 +149,7 @@ The first task is to create an affinity group for the Virtual Network.
 
 1. On the Start menu, start typing **powershell ise**, and then click **Windows PowerShell ISE**. _For this task and most of this HOL, we will use the PowerShell Integrated Scripting Environment._
 
-	![Opening Windows Powershell ISE](./images/opening-windows-powershell-ise.png?raw=true "Opening Windows Powershell ISE")
+	![Opening Windows Powershell ISE](./Images/opening-windows-powershell-ise.png?raw=true "Opening Windows Powershell ISE")
 
 	_Opening Windows Powershell ISE_
 
@@ -214,7 +214,7 @@ The next step is to create a new virtual network to your subscription.
 1. Open a browser and go to [https://manage.windowsazure.com/](https://manage.windowsazure.com/). When prompted, login with your **Windows Azure** credentials. In the Windows Azure portal, click **Networks**, and then click **domainvnet**.  You can see the virtual network that has been added and uses the affinity group you created earlier.
 
 
-	![Verify The Virtual Network Creation](./images/verify-the-virtual-network-creation.png?raw=true "Verify The Virtual Network Creation")
+	![Verify The Virtual Network Creation](./Images/verify-the-virtual-network-creation.png?raw=true "Verify The Virtual Network Creation")
 
 	_Verify The Virtual Network Creation_
 
@@ -238,7 +238,7 @@ Exercise 2 contains 2 tasks:
 	Get-AzureVMImage  |  ft ImageName
 	````
 
-	![Retriving the VM images](./images/retriving-the-vm-images.png?raw=true "Retriving the VM images")
+	![Retriving the VM images](./Images/retriving-the-vm-images.png?raw=true "Retriving the VM images")
 
 	_Retriving the virtual machine images_
 
@@ -270,7 +270,7 @@ Exercise 2 contains 2 tasks:
 	New-AzureVM  -ServiceName  $svcname  -AffinityGroup 'agdomain' -VNetName 'domainvnet' -VMs  $dcvm
 	````
 
-	![Executing the powershell commands](./images/executing-the-powershell-commands.png?raw=true "Executing the powershell commands")
+	![Executing the powershell commands](./Images/executing-the-powershell-commands.png?raw=true "Executing the powershell commands")
 
 	_Executing the powershell commands_
 
@@ -289,7 +289,7 @@ Exercise 2 contains 2 tasks:
 
 1. Select the **DC01** virtual machine, and then on the toolbar, click the **Connect** icon.
 
-	![Connecting to the DC01 VM](./images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
+	![Connecting to the DC01 VM](./Images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
 
 	_Connecting to the DC01 virtual machine_
 
@@ -300,61 +300,61 @@ Exercise 2 contains 2 tasks:
 	| Account | **Administrator** |
 	| Password | **Passw0rd!** |
 
-	![Logging on to the DC01 VM](./images/logging-on-to-the-dc02-vm.png?raw=true "Logging on to the DC01 VM")
+	![Logging on to the DC01 VM](./Images/logging-on-to-the-dc02-vm.png?raw=true "Logging on to the DC01 VM")
 
 	_Logging on to the DC01 virtual machine_
 
 1. On DC01, in **Server Manager**, on the **Tools** menu, click **Computer Management**. _The Computer Management console will open._
 
-	![Opening the Computer Manager console](./images/opening-the-computer-manager-console.png?raw=true "Opening the Computer Manager console")
+	![Opening the Computer Manager console](./Images/opening-the-computer-manager-console.png?raw=true "Opening the Computer Manager console")
 
 	_Opening the Computer Manager console_
 
 1. In the Computer Management console, in the left pane, select **Disk Management**. _Disk Management recognizes that a new initialize disk is added to the computer, and it will show the Initialize Disk dialog box._
 
-	![Selecting Disk Management](./images/selecting-disk-management.png?raw=true "Selecting Disk Management")
+	![Selecting Disk Management](./Images/selecting-disk-management.png?raw=true "Selecting Disk Management")
 
 	_Selecting Disk Management_
 
 1. In the Initialize Disk dialog box, click **OK**. _The new Disk 2 will be initialized._
 
-	![Initializing the disk 2](./images/initializing-the-disk-2.png?raw=true "Initializing the disk 2")
+	![Initializing the disk 2](./Images/initializing-the-disk-2.png?raw=true "Initializing the disk 2")
 
 	_Initializing the disk 2_
 
 1. On Disk 2, right-click the **Unallocated** space, and then click **New Simple Volume**. _The New Simple Volume Wizard will open._
 
-	![Formating the unallocated space](./images/formating-the-unallocated-space.png?raw=true "Formating the unallocated space")
+	![Formating the unallocated space](./Images/formating-the-unallocated-space.png?raw=true "Formating the unallocated space")
 
 	_Formating the unallocated space_
 
 1. In the **New Simple Volume Wizard**, click **Next**.
 
-	![Using the Simple Volume Wizard](./images/using-the-simple-volume-wizard.png?raw=true "Using the Simple Volume Wizard")
+	![Using the Simple Volume Wizard](./Images/using-the-simple-volume-wizard.png?raw=true "Using the Simple Volume Wizard")
 
 	_Using the Simple Volume Wizard_
 
 1. On the **Specify Volume Size** page, click **Next**. _This means that the entire available space (10237 MB) will become a new volume._
 
-	![Specifing the volume size](./images/specifing-the-volume-size.png?raw=true "Specifing the volume size")
+	![Specifing the volume size](./Images/specifing-the-volume-size.png?raw=true "Specifing the volume size")
 
 	_Specifing the volume size_
 
 1. On the **Assign Drive Letter or Path** page, ensure that the drive letter **F** is selected, and then click **Next**.
 
-	![Assigning the drive letter](./images/assigning-the-drive-letter.png?raw=true "Assigning the drive letter")
+	![Assigning the drive letter](./Images/assigning-the-drive-letter.png?raw=true "Assigning the drive letter")
 
 	_Assigning the drive letter_
 
 1. On the **Format Partition** page, in the **Volume Label** text box, type **AD DS Data**, and then click **Next**.
 
-	![Specifing the volume label](./images/specifing-the-volume-label.png?raw=true "Specifing the volume label")
+	![Specifing the volume label](./Images/specifing-the-volume-label.png?raw=true "Specifing the volume label")
 
 	_Specifing the volume label_
 
 1. On the **Completing the New Simple Volume Wizard** page, click **Finish**. _Windows will quick format the disk, and assign it the drive letter **F:**._
 
-	![Completing the wizard](./images/completing-the-wizard.png?raw=true "Completing the wizard")
+	![Completing the wizard](./Images/completing-the-wizard.png?raw=true "Completing the wizard")
 
 	_Completing the wizard_
 
@@ -380,7 +380,7 @@ Exercise 3 contains 3 tasks:
 	````
 
 
-	![Adding the AD feature](./images/adding-the-ad-feature.png?raw=true "Adding the AD feature")
+	![Adding the AD feature](./Images/adding-the-ad-feature.png?raw=true "Adding the AD feature")
 
 
 	_Windows is installing the Active Directory Domain Services role._
@@ -395,11 +395,11 @@ Exercise 3 contains 3 tasks:
 
 	_The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that we added earlier, and does not have this feature enabled._
 
-	![Promoting the domain controller with powershell ](./images/promoting-the-domain-controller-with-powershell.png?raw=true "Promoting the domain controller with powershell")
+	![Promoting the domain controller with powershell ](./Images/promoting-the-domain-controller-with-powershell.png?raw=true "Promoting the domain controller with powershell")
 
 1. At the **SafeModeAdministratorPassword** prompt and the **Confirm SafeModeAdministratorPassword** prompt, type **Passw0rd!**, and then press **Enter**. _The computer is promoted to domain controller. After a few moments, the DC01 Virtual Machine will restart. You will lose the connection to the restarting Virtual Machine._
 
-	![Configuring the administrator password](./images/configuring-the-administrator-password.png?raw=true "Configuring the administrator password")
+	![Configuring the administrator password](./Images/configuring-the-administrator-password.png?raw=true "Configuring the administrator password")
 
 	_Configuring the administrator password_
 
@@ -409,7 +409,7 @@ Exercise 3 contains 3 tasks:
 1. Wait two minutes for the DC01 Virtual Machine to restart.
 In the Azure portal, on the Virtual Machines page, select **DC01**, and on the toolbar, click the **Connect** icon.
 	
-	![Connecting to the DC01 VM](./images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
+	![Connecting to the DC01 VM](./Images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
 
 	_Connecting to the DC01 virtual machine_
 
@@ -420,7 +420,7 @@ In the Azure portal, on the Virtual Machines page, select **DC01**, and on the t
 	| User account | **Contoso\Administrator** |
 	| Password | **Passw0rd!** |
 
-	![Connecting to the VM](./images/connecting-to-the-vm.png?raw=true "Connecting to the VM")
+	![Connecting to the VM](./Images/connecting-to-the-vm.png?raw=true "Connecting to the VM")
 
 	_Connecting to the virtual machine_
 
