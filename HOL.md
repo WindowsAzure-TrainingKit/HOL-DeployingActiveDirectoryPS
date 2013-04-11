@@ -203,7 +203,7 @@ The next step is to create a new virtual network to your subscription.
 	</NetworkConfiguration>
 	```
 
-	> **Note:** The preceding xml configuration will only work if there is no other networks defined in your suscription. If you have other networks defined, get their configuration and add it to the xml file before executing the following step. To get the current virtual network configuration you can use the following command: _(Get-AzureVNetConfig).XMLConfiguration_. 
+	> **Note:** The preceding xml configuration will only work if there are no other networks defined in your suscription. If you have other networks defined, get their configuration and add it to the xml file before executing the following step. To get the current virtual network configuration you can use the following command: _(Get-AzureVNetConfig).XMLConfiguration_. 
 
 1. In the PowerShell ISE window, type the following command:
 
