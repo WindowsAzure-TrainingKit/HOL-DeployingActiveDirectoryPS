@@ -456,7 +456,7 @@ In the Azure portal, on the Virtual Machines page, select **DC01**, and on the t
 	dcdiag.exe
 	````
 
-	_This output of the command confirms that DC01 was successfully promoted to domain controller._
+	>**Note:** The output of the command confirms that DC01 was successfully promoted to domain controller
 
 <a name='Summary'/>
 ## Summary ##
