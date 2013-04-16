@@ -37,13 +37,27 @@ The following is required to complete this hands-on lab:
 
 >**Note:** In order to run through the complete hands-on lab, you must have network connectivity. 
 
+<a name="Setup" />
+### Setup ###
+
+In order to execute the exercises in this hands-on lab you need to set up your environment.
+
+1. Open Windows Explorer and browse to the lab's **Source** folder.
+
+1. Execute the **Setup.cmd** file with Administrator privileges to launch the setup process that will configure your environment.
+
+1. If the User Account Control dialog is shown, confirm the action to proceed.
+
+> **Note:** Make sure you have checked all the dependencies for this lab before running the setup. 
+
+
 <a name='gettingstarted' /></a>
 ### Getting Started: Obtaining Subscription's Credentials ###
 
 In order to complete this lab, you will need your subscription’s secure credentials. Windows Azure lets you download a Publish Settings file with all the information required to manage your account in your development environment.
 
 <a name='Ex1Task1' /></a>
-#### Task 1 - Downloading and Importing a Publish-settings File ####
+#### Task 1 - Downloading and Importing a Publish Settings file ####
 
 > **Note:** If you have done these steps in a previous lab on the same computer you can move on to Exercise 1.
 
@@ -54,13 +68,13 @@ In this task, you will log on to the Windows Azure Portal and download the publi
 
 1.	Sign in using the **Microsoft Account** associated with your **Windows Azure** account.
 
-1.	**Save** the publish-settings file to your local file system.
+1.	**Save** the Publish Settings file to your local file system.
 
 	![Downloading publish-settings file](Images/downloading-publish-settings-file.png?raw=true 'Downloading publish-settings file')
 
-	_Downloading publish-settings file_
+	_Downloading Publish Settings file_
 
-	> **Note:** The download page shows you how to import the publish-settings file using the Visual Studio Publish box. This lab will show you how to import it using the Windows Azure PowerShell Cmdlets instead.
+	> **Note:** The download page shows you how to import the Publish Settings file using the Visual Studio Publish box. This lab will show you how to import it using the Windows Azure PowerShell Cmdlets instead.
 
 1. Search for **Windows Azure PowerShell** in the Start screen and choose **Run as Administrator**.
 
@@ -81,7 +95,7 @@ In this task, you will log on to the Windows Azure Portal and download the publi
 	> For more information about Execution Policies refer to this TechNet article: <http://technet.microsoft.com/en-us/library/ee176961.aspx>
 
 
-1.	The following script imports your publish-settings file and generates an XML file with your account information. You will use these values during the lab to manage your Windows Azure Subscription. Replace the placeholder with the path to your publish-setting file and execute the script.
+1.	The following script imports your Publish Settings file and generates an XML file with your account information. You will use these values during the lab to manage your Windows Azure Subscription. Replace the placeholder with the path to your Publish Setting file and execute the script.
 
 	<!-- mark:1 -->
 	````PowerShell
@@ -108,7 +122,7 @@ In this task, you will log on to the Windows Azure Portal and download the publi
 
 
 		````PowerShell
-		New-AzureStorageAccount -StorageAccountName '[YOUR-SUBSCRIPTION-NAME]' -Location '[DC-LOCATION]'
+		New-AzureStorageAccount -StorageAccountName '[YOUR-STORAGE-ACCOUNT]' -Location '[DC-LOCATION]'
 		````
 
 1. Execute the following command to set your current storage account for your subscription.
@@ -134,8 +148,8 @@ Running an Active Directory Domain requires persistent IP addresses and that cli
 
 The network configuration used for this lab defines the following:
 
-- A Virtual Network Named domainvnet with an address prefix of: 10.0.0.0/16
-- A subnet named Subnet-1 with an address prefix of: 10.0.0.0/24
+- A Virtual Network Named **domainvnet** with an address prefix of: 10.0.0.0/16
+- A subnet named **Subnet-1** with an address prefix of: 10.0.0.0/24
 
 Exercise 1 contains 2 tasks:
 
@@ -147,7 +161,7 @@ Exercise 1 contains 2 tasks:
 
 The first task is to create an affinity group for the Virtual Network. 
 
-1. On the Start menu, start typing **powershell ise**, and then click **Windows PowerShell ISE**. _For this task and most of this HOL, we will use the PowerShell Integrated Scripting Environment._
+1. On the Start menu, start typing **powershell ise**, and then click **Windows PowerShell ISE**. For this task and most of this HOL, we will use the PowerShell Integrated Scripting Environment.
 
 	![Opening Windows Powershell ISE](./Images/opening-windows-powershell-ise.png?raw=true "Opening Windows Powershell ISE")
 
@@ -157,7 +171,8 @@ The first task is to create an affinity group for the Virtual Network.
 	
 	````PowerShell
 	# Creates the affinity group
-	New-AzureAffinityGroup -Location "_LOCATION_" -Name agdomain
+	New-AzureAffinityGroup -Location "LOCATION" -Name agdomain
+	```
 
 	> **Note:** For the _LOCATION_ variable above, please replace it with the exact text below (minus the number) from the datacenter closest to you:
 	1. West US
@@ -172,7 +187,7 @@ The first task is to create an affinity group for the Virtual Network.
 
 The next step is to create a new virtual network to your subscription.
 
-1. First create an XML file called **domainnet.xml** on your local host where you are running the PowerShell ISE with the following contents:
+1. First create an XML file called **domainvnet.xml** on your local host where you are running the PowerShell ISE with the following contents:
 
 	````XML
 	# Creates the domainvnet xml file
@@ -203,15 +218,16 @@ The next step is to create a new virtual network to your subscription.
 	</NetworkConfiguration>
 	```
 
-	> **Note:** The preceding xml configuration will only work if there are no other networks defined in your suscription. If you have other networks defined, get their configuration and add it to the xml file before executing the following step. To get the current virtual network configuration you can use the following command: _(Get-AzureVNetConfig).XMLConfiguration_. 
+	> **Note:** The preceding xml configuration will only work if there are no other networks. If you have other networks defined, get their configuration and add it to the xml file before executing the following step. To get the current virtual network configuration you can use the following command: _(Get-AzureVNetConfig).XMLConfiguration_. 
 
 1. In the PowerShell ISE window, type the following command:
 
 	````PowerShell
 	# Creates the virtual network from XML file
 	Set-AzureVNetConfig -ConfigurationPath _c:\yourpath_\domainvnet.xml
+	```
 
-	> **Note:** Replace _c:\yourpath_ above with the path to where you saved the domainnet.xml file in the previous step.
+	> **Note:** Replace _c:\yourpath_ above with the panoth to where you saved the domainnet.xml file in the previous step.
 
 1. Open a browser and go to [https://manage.windowsazure.com/](https://manage.windowsazure.com/). When prompted, login with your **Windows Azure** credentials. In the Windows Azure portal, click **Networks**, and then click **domainvnet**.  You can see the virtual network that has been added and uses the affinity group you created earlier.
 
@@ -227,11 +243,11 @@ You will now create a new virtual machine from a Windows Server 2012 gallery ima
 
 Exercise 2 contains 2 tasks:
 
-1. Create a new virtual machine
+1. Create a new Virtual Machine
 1. Configure a new data disk on DC01
 
 <a name="Ex2Task1" /></a>
-#### Task 1 - Create a new Virtual Machine with a data disk ####
+#### Task 1 - Create a new Virtual Machine####
 
 1. In the PowerShell ISE window, type the following command:
 
@@ -282,10 +298,12 @@ Exercise 2 contains 2 tasks:
 
 1. Click the **DC01** name.
 
-1. On the DC01 page, select the **Endpoints** tab. _Notice that by default the PowerShell cmdlet will add an RDP endpoint for port 3389. Therefore, we did not specify this endpoint configuration in the PowerShell commands._
+1. On the DC01 page, select the **Endpoints** tab to check the RDP endpoint port.
+
+	>**Note**: Notice that by default the PowerShell cmdlet will add an RDP endpoint for port 3389. Therefore, we did not specify this endpoint configuration in the PowerShell commands.
 
 <a name="Ex2Task2" /></a>
-#### Task 2 - Configure a new data disk ####
+#### Task 2 - Configure a new data disk on DC01####
 
 1. In the Windows Azure console, in the **Virtual Machines** section, wait a few moments until the status of **DC01** is **Running**.
 
@@ -306,25 +324,25 @@ Exercise 2 contains 2 tasks:
 
 	_Logging on to the DC01 virtual machine_
 
-1. On DC01, in **Server Manager**, on the **Tools** menu, click **Computer Management**. _The Computer Management console will open._
+1. On DC01, in **Server Manager**, on the **Tools** menu, click **Computer Management**. The Computer Management console will open.
 
 	![Opening the Computer Manager console](./Images/opening-the-computer-manager-console.png?raw=true "Opening the Computer Manager console")
 
 	_Opening the Computer Manager console_
 
-1. In the Computer Management console, in the left pane, select **Disk Management**. _Disk Management recognizes that a new initialize disk is added to the computer, and it will show the Initialize Disk dialog box._
+1. In the Computer Management console, in the left pane, select **Disk Management**. Disk Management recognizes that a new initialize disk is added to the computer, and it will show the Initialize Disk dialog box.
 
 	![Selecting Disk Management](./Images/selecting-disk-management.png?raw=true "Selecting Disk Management")
 
 	_Selecting Disk Management_
 
-1. In the Initialize Disk dialog box, click **OK**. _The new Disk 2 will be initialized._
+1. In the Initialize Disk dialog box, click **OK**.
 
 	![Initializing the disk 2](./Images/initializing-the-disk-2.png?raw=true "Initializing the disk 2")
 
 	_Initializing the disk 2_
 
-1. On Disk 2, right-click the **Unallocated** space, and then click **New Simple Volume**. _The New Simple Volume Wizard will open._
+1. On Disk 2, right-click the **Unallocated** space, and then click **New Simple Volume**.
 
 	![Formating the unallocated space](./Images/formating-the-unallocated-space.png?raw=true "Formating the unallocated space")
 
@@ -336,7 +354,9 @@ Exercise 2 contains 2 tasks:
 
 	_Using the Simple Volume Wizard_
 
-1. On the **Specify Volume Size** page, click **Next**. _This means that the entire available space (10237 MB) will become a new volume._
+1. On the **Specify Volume Size** page, click **Next**. 
+
+	>**Note**: This means that the entire available space (10237 MB) will become a new volume.
 
 	![Specifing the volume size](./Images/specifing-the-volume-size.png?raw=true "Specifing the volume size")
 
@@ -354,7 +374,9 @@ Exercise 2 contains 2 tasks:
 
 	_Specifing the volume label_
 
-1. On the **Completing the New Simple Volume Wizard** page, click **Finish**. _Windows will quick format the disk, and assign it the drive letter **F:**._
+1. On the **Completing the New Simple Volume Wizard** page, click **Finish**. 
+
+	>**Note**: Windows will quick format the disk, and assign it the drive letter **F:**.
 
 	![Completing the wizard](./Images/completing-the-wizard.png?raw=true "Completing the wizard")
 
@@ -385,7 +407,7 @@ Exercise 3 contains 3 tasks:
 	![Adding the AD feature](./Images/adding-the-ad-feature.png?raw=true "Adding the AD feature")
 
 
-	_Windows is installing the Active Directory Domain Services role._
+	_Windows is installing the Active Directory Domain Services role_
 
 <a name="Ex3Task2" /></a>
 #### Task 2 - Configure the Active Directory Domain Services Role ####
@@ -395,11 +417,13 @@ Exercise 3 contains 3 tasks:
 	Install-ADDSForest  -DomainName "contoso.com" -InstallDns:$true  -DatabasePath "F:\NTDS"  -LogPath "F:\NTDS"  -SysvolPath "F:\SYSVOL"  -NoRebootOnCompletion:$false  -Force:$true
 	````
 
-	_The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that we added earlier, and does not have this feature enabled._
+	>**Note:** The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that we added earlier, and does not have this feature enabled
 
 	![Promoting the domain controller with powershell ](./Images/promoting-the-domain-controller-with-powershell.png?raw=true "Promoting the domain controller with powershell")
 
-1. At the **SafeModeAdministratorPassword** prompt and the **Confirm SafeModeAdministratorPassword** prompt, type **Passw0rd!**, and then press **Enter**. _The computer is promoted to domain controller. After a few moments, the DC01 Virtual Machine will restart. You will lose the connection to the restarting Virtual Machine._
+1. At the **SafeModeAdministratorPassword** prompt and the **Confirm SafeModeAdministratorPassword** prompt, type **Passw0rd!**, and then press **Enter**. 
+
+	>**Note:** The computer is promoted to domain controller. After a few moments, the DC01 Virtual Machine will restart. You will lose the connection to the restarting Virtual Machine.
 
 	![Configuring the administrator password](./Images/configuring-the-administrator-password.png?raw=true "Configuring the administrator password")
 
@@ -426,7 +450,7 @@ In the Azure portal, on the Virtual Machines page, select **DC01**, and on the t
 
 	_Connecting to the virtual machine_
 
-1. To verify that DC01 is working properly, open a Powershell windows, and run the following command:
+1. To verify that DC01 is working properly, open a Powershell window, and run the following command:
 
 	````PowerShell
 	dcdiag.exe
