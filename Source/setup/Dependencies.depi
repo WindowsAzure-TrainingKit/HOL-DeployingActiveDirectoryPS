@@ -9,11 +9,10 @@
 			disableSkip="false"
 			type="WebPI" />
 		<dependency
-			hint="Windows Azure PowerShell - June 2012;0.6.0"
+			hint="WindowsAzurePowershell"
 			name="Windows Azure PowerShell"
-			description="Windows Azure PowerShell is a powerful scripting environment to control and automate the deployment and management of your workloads in Windows Azure."
-			helpLink="http://msdn.microsoft.com/en-us/library/windowsazure/jj156055"
+			helpLink=""
 			disableSkip="false"
-			type="Uninstall" /> 
+			type="WebPI" />  
     </dependencies>
 </DependencyCheckerConfiguration>
