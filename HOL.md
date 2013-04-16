@@ -62,7 +62,7 @@ In order to complete this lab, you will need your subscription’s secure creden
 > **Note:** If you have done these steps in a previous lab on the same computer you can move on to Exercise 1.
 
 
-In this task, you will log on to the Windows Azure Portal and download the publish-settings file. This file contains the secure credentials and additional information about your Windows Azure Subscription that you will use in your development environment. Therefore, you will import this file using the Windows Azure Cmdlets in order to install the certificate and obtain the account information.
+In this task, you will log on to the Windows Azure Portal and download the Publish Settings file. This file contains the secure credentials and additional information about your Windows Azure Subscription that you will use in your development environment. Therefore, you will import this file using the Windows Azure Cmdlets in order to install the certificate and obtain the account information.
 
 1.	Open Internet Explorer and browse to <https://windows.azure.com/download/publishprofile.aspx>.
 
