@@ -264,7 +264,7 @@ Exercise 2 contains 2 tasks:
 
 1. In the PowerShell ISE window, type or copy the following commands.
 
-	> **Note:** Make sure to replace NNNN in the $svcname variable below with the actual hosted service name you used before or type a new name to create a new hosted service.
+	> **Note:** Make sure to replace NNNN in the $svcname variable below with the actual hosted service name you used before or type a new name to create a new hosted service. Additionally, replace the **AdminUsername* parameter placeholder with a username of your choice.
 
 	````PowerShell
 	# Defines image name
@@ -280,7 +280,7 @@ Exercise 2 contains 2 tasks:
 
 	# Defines VM configuration, including size, attached datadisk, and subnet 
 	$dcvm = New-AzureVMConfig  -Name  $vmname  -ImageName  $imgname -InstanceSize "Small"  |
-		Add-AzureProvisioningConfig  -Windows  -Password  $password  |
+		Add-AzureProvisioningConfig  -Windows -AdminUsername '[YOUR-USERNAME]' -Password  $password  |
 		Add-AzureDataDisk  -CreateNew  -DiskSizeInGB  10  -DiskLabel "ADdisk"  -LUN 0  |
 		Set-AzureSubnet  -SubnetName  $subnetname
 
