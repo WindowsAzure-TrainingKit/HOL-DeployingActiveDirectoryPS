@@ -5,7 +5,7 @@
 <a name="Overview" /></a>
 ## Overview ##
 
-In this lab, you will create a new Windows Server 2012 Windows Azure Virtual Machine called DC01 using the Windows Azure management console in your web browser, and then deploy Active Directory using Server Manager on the DC01 virtual machine. DC01 will be the first domain controller in a new forest.
+In this lab, you will provision a newly created Windows Server 2012 Virtual Machine called DC01 in Windows Azure using the Windows Azure PowerShell Cmdlets and then deploy Active Directory using Server Manager on DC01. DC01 will be the first domain controller in a new forest.
 
 When deploying Active Directory in Windows Azure, two aspects are important to point out.
 
@@ -18,10 +18,8 @@ Secondly, it is important to prevent Active Directory database corruption. Activ
 
 In this hands-on lab, you will learn how to:
 
-- Configure Virtual Networking
-- Create new Virtual Machines from Gallery Images
-- Deploy a Domain Controller
-
+- Provision a data disk to a Virtual Machine
+- Deploy a Domain Controller in Windows Azure
 
 <a name="Prerequisites"></a> 
 ### Prerequisites ###
@@ -34,6 +32,8 @@ The following is required to complete this hands-on lab:
 
 [1]: http://microsoft.com/powershell/
 [2]: http://msdn.microsoft.com/en-us/library/windowsazure/jj156055
+
+Additionally, you must complete the _Provisioning a Windows Azure Virtual Machine (PowerShell)_ HOL
 
 >**Note:** In order to run through the complete hands-on lab, you must have network connectivity. 
 
@@ -56,7 +56,7 @@ In order to execute the exercises in this hands-on lab you need to set up your e
 
 In order to complete this lab, you will need your subscription’s secure credentials. Windows Azure lets you download a Publish Settings file with all the information required to manage your account in your development environment.
 
-<a name='Ex1Task1' /></a>
+<a name='GSTask1' /></a>
 #### Task 1 - Downloading and Importing a Publish Settings file ####
 
 > **Note:** If you have done these steps in a previous lab on the same computer you can move on to Exercise 1.
@@ -137,9 +137,8 @@ In this task, you will log on to the Windows Azure Portal and download the Publi
 
 This hands-on lab includes the following exercises:
 
-1. [Configure Virtual Networking](#Exercise1)
-1. [Create a new virtual machine from a gallery image](#Exercise2)
-1. [Deploy a new domain controller in Windows Server 2012](#Exercise3)
+1. [Add a new data disk to the virtual machine](#Exercise1)
+1. [Deploy a new domain controller in Windows Server 2012](#Exercise2)
 
 <a name="Exercise1" /></a>
 ### Exercise 1: Add a new data disk to the virtual machine ###
@@ -175,8 +174,6 @@ Exercise 1 contains 2 tasks:
 
 <a name="Ex1Task2" /></a>
 #### Task 2 - Configure a new data disk on DC01####
-
-1. In the Windows Azure console, in the **Virtual Machines** section, wait a few moments until the status of **DC01** is **Running**.
 
 1. In the **Virtual Machines** section of the Windows Azure portal, select the **DC01** virtual machine, and then on the toolbar, click the **Connect** icon to connect using **Remote Desktop Connection**.
 
@@ -238,13 +235,13 @@ Exercise 1 contains 2 tasks:
 
 	_Specifing the volume label_
 
-1. On the **Completing the New Simple Volume Wizard** page, click **Finish**. 
-
-	>**Note**: Windows will quick format the disk, and assign it the drive letter **F:**.
+1. On the **Completing the New Simple Volume Wizard** page, click **Finish**. _Windows will quick format the disk, and assign it the drive letter F_.
 
 	![Completing the wizard](./Images/completing-the-wizard.png?raw=true "Completing the wizard")
 
 	_Completing the wizard_
+
+	>**Note:** if you are prompted to format the new AS DS Data disk, click **OK** in the dialog box and format the disk as NTFS.
 
 1. Close the Computer Management console.
 
@@ -301,16 +298,9 @@ In the Azure portal, on the Virtual Machines page, select **DC01**, and on the t
 
 	_Connecting to the DC01 virtual machine_
 
-1. Open the DC01.rdp file, and connect to the virtual machine. To log on, use credentials:
+1. Open the DC01.rdp file, and connect to the virtual machine.
 
-	| Field | Value |
-	|--------|--------|
-	| User account | **Contoso\Administrator** |
-	| Password | **Passw0rd!** |
-
-	![Connecting to the VM](./Images/connecting-to-the-vm.png?raw=true "Connecting to the VM")
-
-	_Connecting to the virtual machine_
+	>**Note:** use the credentials that you inserted when creating the virtual machine.
 
 1. To verify that DC01 is working properly, open a Powershell window, and run the following command:
 
@@ -323,4 +313,4 @@ In the Azure portal, on the Virtual Machines page, select **DC01**, and on the t
 <a name='Summary'/>
 ## Summary ##
 
-In this lab, you went through the steps of deploying a new Active Directory Domain using Windows Azure virtual machines and a simple virtual network. This lab also demonstrated how once in place, virtual machines could be joined to the domain at boot time.
+In this lab, you went through the steps of deploying a new Active Directory Domain controller in a new forest using Windows Azure virtual machines.
