@@ -241,7 +241,7 @@ Exercise 1 contains 2 tasks:
 
 	_Completing the wizard_
 
-	>**Note:** if you are prompted to format the new AS DS Data disk, click **OK** in the dialog box and format the disk as NTFS.
+	>**Note:** if you are prompted to format the new AD DS Data disk, click **OK** in the dialog box and format the disk as NTFS.
 
 1. Close the Computer Management console.
 
@@ -276,7 +276,7 @@ Exercise 2 contains 3 tasks:
 	Install-ADDSForest  -DomainName "contoso.com" -InstallDns:$true  -DatabasePath "F:\NTDS"  -LogPath "F:\NTDS"  -SysvolPath "F:\SYSVOL"  -NoRebootOnCompletion:$false  -Force:$true
 	````
 
-	>**Note:** The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that we added earlier, and does not have this feature enabled
+	>**Note:** The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that we added earlier, and does not have this feature enabled.
 
 	![Promoting the domain controller with powershell ](./Images/promoting-the-domain-controller-with-powershell.png?raw=true "Promoting the domain controller with powershell")
 
