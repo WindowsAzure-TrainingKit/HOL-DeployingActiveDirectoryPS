@@ -51,12 +51,12 @@ In order to execute the exercises in this hands-on lab you need to set up your e
 > **Note:** Make sure you have checked all the dependencies for this lab before running the setup. 
 
 
-<a name='gettingstarted' /></a>
+<a name="gettingstarted" /></a>
 ### Getting Started: Obtaining Subscription's Credentials ###
 
 In order to complete this lab, you will need your subscription’s secure credentials. Windows Azure lets you download a Publish Settings file with all the information required to manage your account in your development environment.
 
-<a name='GSTask1' /></a>
+<a name="GSTask1" /></a>
 #### Task 1 - Downloading and Importing a Publish Settings file ####
 
 > **Note:** If you have done these steps in a previous lab on the same computer you can move on to Exercise 1.
@@ -137,21 +137,21 @@ In this task, you will log on to the Windows Azure Portal and download the Publi
 
 This hands-on lab includes the following exercises:
 
-1. [Add a new data disk to the virtual machine](#Exercise1)
-1. [Deploy a new domain controller in Windows Server 2012](#Exercise2)
+1. [Adding a new data disk to the virtual machine](#Exercise1)
+1. [Deploying a new domain controller in Windows Server 2012](#Exercise2)
 
 <a name="Exercise1" /></a>
-### Exercise 1: Add a new data disk to the virtual machine ###
+### Exercise 1: Adding a new data disk to the virtual machine ###
 
 You will now modify the virtual machine you already created from the "Provisioning a Windows Azure Virtual Machine (PowerShell)" lab. We will call this VM DC01. We will create and provision a data disk to this existing VM which will be used in exercise 2 to place the AD database files.
 
 Exercise 1 contains 2 tasks:
 
-1. Attach a data disk to DC01
-1. Configure a new data disk on DC01
+1. Attaching a data disk to DC01
+1. Configuring a new data disk on DC01
 
 <a name="Ex1Task1" /></a>
-#### Task 1 - Attach a data disk to DC01####
+#### Task 1 - Attaching a data disk to DC01####
 
 1. Start **Windows Azure PowerShell**.
 
@@ -173,7 +173,7 @@ Exercise 1 contains 2 tasks:
 	_Adding data disk_
 
 <a name="Ex1Task2" /></a>
-#### Task 2 - Configure a new data disk on DC01####
+#### Task 2 - Configuring a new data disk on DC01####
 
 1. Go to the **Virtual Machines** page within the Windows Azure Management portal and select the Virtual Machine you created by following the _Provisioning a Windows Azure Virtual Machine (PowerShell)_ HOL.
 
@@ -238,17 +238,17 @@ Exercise 1 contains 2 tasks:
 	>**Note:** Do not close the remote session as you will need it in the next exercise.
 
 <a name="Exercise2" /></a>
-### Exercise 2: Deploy a new domain controller in Windows Server 2012 ###
+### Exercise 2: Deploying a new domain controller in Windows Server 2012 ###
 You have just created a base virtual machine called DC01, attached the necessary data disk, and provisioned the disk. Now you are going to install and configure active directory and then verify the install was successful.
 
 Exercise 2 contains 3 tasks:
 
-1. Install the Active Directory Domain Services Role 
-1. Configure the Active Directory Domain Services Role
-1. Verify the Domain Controller Installed Successfully
+1. Installing the Active Directory Domain Services Role 
+1. Configuring the Active Directory Domain Services Role
+1. Verifying the Domain Controller Installed Successfully
 
 <a name="Ex2Task1" /></a>
-#### Task 1 - Install the Active Directory Domain Services Role ####
+#### Task 1 - Installing the Active Directory Domain Services Role ####
 
 1. In the PowerShell remote session from the previous exercise, type the following command to install the Active Directory role and features:
 
@@ -261,7 +261,7 @@ Exercise 2 contains 3 tasks:
 	_Windows is installing the Active Directory Domain Services role_
 
 <a name="Ex2Task2" /></a>
-#### Task 2 - Configure the Active Directory Domain Services Role ####
+#### Task 2 - Configuring the Active Directory Domain Services Role ####
 1. When the feature installation is completed, type the following single command to promote the domain controller:
 
 	````PowerShell
@@ -289,7 +289,7 @@ Exercise 2 contains 3 tasks:
 	_Domain controller configured_
 
 <a name="Ex2Task3" /></a>
-#### Task 3 - Verify the Domain Controller Installed Successfully ####
+#### Task 3 - Verifying the Domain Controller Installed Successfully ####
 
 1. Wait two to three minutes for the DC01 Virtual Machine to restart.
 In Windows Azure PowerShell, type the following command to remotely connect to the virtual machine. Replace [YOUR-VM-DNS] and [YOUR-ENDPOINT-PORT] placeholders with the values obtained when configuring the new data disk in Exercise 1. Replace [YOUR-VM-USERNAME] with the administrator username provided when you created the virtual machine.
@@ -311,7 +311,7 @@ In Windows Azure PowerShell, type the following command to remotely connect to t
 
 	>**Note:** The output of the command confirms that DC01 was successfully promoted to domain controller
 
-<a name='Summary'/>
+<a name="Summary"/>
 ## Summary ##
 
 In this lab, you went through the steps of deploying a new Active Directory Domain controller in a new forest using Windows Azure virtual machines and remote PowerShell.
