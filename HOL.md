@@ -175,75 +175,65 @@ Exercise 1 contains 2 tasks:
 <a name="Ex1Task2" /></a>
 #### Task 2 - Configure a new data disk on DC01####
 
-1. In the **Virtual Machines** section of the Windows Azure portal, select the **DC01** virtual machine, and then on the toolbar, click the **Connect** icon to connect using **Remote Desktop Connection**.
+1. Go to the **Virtual Machines** page within the Windows Azure Management portal and select the Virtual Machine you created by following the _Provisioning a Windows Azure Virtual Machine (PowerShell)_ HOL.
 
-	![Connecting to the DC01 VM](./Images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
+1. Click on the Virtual Machine name to open its page and click on **Dashboard**. Locate and take note of the DNS.
 
-	_Connecting to the DC01 virtual machine_
+	![Virtual Machine DNS](Images/virtual-machine-dns.png?raw=true)
 
-1. Open the DC01.rdp file, and connect to the virtual machine.
+	_Virtual Machine DNS_
 
-	>**Note:** use the credentials that you inserted when creating the virtual machine.
+1.  Now click on **Endpoints** and take note of the public port in the remote PowerShell endpoint that was created when you provisioned the virtual machine.
 
-1. On DC01, in **Server Manager**, on the **Tools** menu, click **Computer Management**. The Computer Management console will open.
+	![Virtual Machine Endpoints](Images/virtual-machine-endpoints.png?raw=true)
 
-	![Opening the Computer Manager console](./Images/opening-the-computer-manager-console.png?raw=true "Opening the Computer Manager console")
+	_Virtual Machine Endpoints_
 
-	_Opening the Computer Manager console_
+1. In Windows Azure PowerShell, type the following command to access remotely to the virtual machine. Replace [YOUR-VM-DNS] and [YOUR-ENDPOINT-PORT] placeholders with the values obtained in the previous steps. Replace [YOUR-VM-USERNAME] with the administrator username provided when you created the virtual machine.
 
-1. In the Computer Management console, in the left pane, select **Disk Management**. Disk Management recognizes that a new initialize disk is added to the computer, and it will show the Initialize Disk dialog box.
+	````PowerShell
+	Enter-PSSession -ComputerName '[YOUR-VM-DNS]' -Port [YOUR-ENDPOINT-PORT] -Authentication Negotiate -Credential '[YOUR-VM-USERNAME]' -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+	````
+	>**Note:** When prompted, login with the administrator password.
 
-	![Selecting Disk Management](./Images/selecting-disk-management.png?raw=true "Selecting Disk Management")
+1. You should now be at a prompt with the host name to the left.
 
-	_Selecting Disk Management_
+1. Type the following command to list the available disks in the virtual machine and take note of the Number of the disk you added in the previous task.
 
-1. In the Initialize Disk dialog box, click **OK**.
+	>**Note:** You can identify the disk you added through the size, 10 GB, and the partition style listed as RAW.
 
-	![Initializing the disk 2](./Images/initializing-the-disk-2.png?raw=true "Initializing the disk 2")
+	````PowerShell
+	Get-Disk
+	````
 
-	_Initializing the disk 2_
+	![Get-Disk Cmdlet Output](Images/get-disk-cmdlet-output.png?raw=true)
 
-1. On Disk 2, right-click the **Unallocated** space, and then click **New Simple Volume**.
+	_Get-Disk Cmdlet Output_
 
-	![Formating the unallocated space](./Images/formating-the-unallocated-space.png?raw=true "Formating the unallocated space")
+1. Type the following command to initialize the disk. This will allow the creation of a partition and volume. Make sure to replace [YOUR-DISK-NUMBER] with the disk number you got in the previous step.
 
-	_Formating the unallocated space_
+	````PowerShell
+	Initialize-Disk -Number [YOUR-DISK-NUMBER] -PartitionStyle MBR
+	````
 
-1. In the **New Simple Volume Wizard**, click **Next**.
+	>**Note:** After the command executes, type again _Get-Disk_. You will see the disk partition style now listed as MBR.
 
-	![Using the Simple Volume Wizard](./Images/using-the-simple-volume-wizard.png?raw=true "Using the Simple Volume Wizard")
+	![Initialize-Disk Cmdlet Output](Images/initialize-disk-cmdlet-output.png?raw=true)
 
-	_Using the Simple Volume Wizard_
+	_Initialize-Disk Cmdlet Output_
 
-1. On the **Specify Volume Size** page, click **Next**. 
+1. Now you need to create a new partition on the initialized disk and then format the volume. To do this, type the following command. Make sure to replace [YOUR-DISK-NUMBER] with the disk number you got in step 6. When asked for confirmation, type Y to continue.
 
-	>**Note**: This means that the entire available space (10237 MB) will become a new volume.
+	````PowerShell
+	New-Partition -DiskNumber [YOUR-DISK-NUMBER] -UseMaximumSize -DriveLetter 'F' | 
+      Format-Volume -NewFileSystemLabel "AD DS Data" -FileSystem NTFS
+	````
 
-	![Specifing the volume size](./Images/specifing-the-volume-size.png?raw=true "Specifing the volume size")
+	>**Note:** This command will create a new partition on the disk, assigning the drive letter F and using the whole space available. Then, it will format a volume on the newly created partition using NTFS file system.
 
-	_Specifing the volume size_
+	![New-Partition Cmdlet Output](Images/new-partition-cmdlet-output.png?raw=true)
 
-1. On the **Assign Drive Letter or Path** page, ensure that the drive letter **F** is selected, and then click **Next**.
-
-	![Assigning the drive letter](./Images/assigning-the-drive-letter.png?raw=true "Assigning the drive letter")
-
-	_Assigning the drive letter_
-
-1. On the **Format Partition** page, in the **Volume Label** text box, type **AD DS Data**, and then click **Next**.
-
-	![Specifing the volume label](./Images/specifing-the-volume-label.png?raw=true "Specifing the volume label")
-
-	_Specifing the volume label_
-
-1. On the **Completing the New Simple Volume Wizard** page, click **Finish**. _Windows will quick format the disk, and assign it the drive letter F_.
-
-	![Completing the wizard](./Images/completing-the-wizard.png?raw=true "Completing the wizard")
-
-	_Completing the wizard_
-
-	>**Note:** if you are prompted to format the new AD DS Data disk, click **OK** in the dialog box and format the disk as NTFS.
-
-1. Close the Computer Management console.
+	_New-Partition Cmdlet Output_
 
 <a name="Exercise2" /></a>
 ### Exercise 2: Deploy a new domain controller in Windows Server 2012 ###
@@ -257,6 +247,16 @@ Exercise 2 contains 3 tasks:
 
 <a name="Ex2Task1" /></a>
 #### Task 1 - Install the Active Directory Domain Services Role ####
+
+1. In the **Virtual Machines** section of the Windows Azure portal, select the **DC01** virtual machine, and then on the toolbar, click the **Connect** icon to connect using **Remote Desktop Connection**.
+
+	![Connecting to the DC01 VM](./Images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
+
+	_Connecting to the DC01 virtual machine_
+
+1. Open the DC01.rdp file, and connect to the virtual machine.
+
+	>**Note:** use the credentials that you inserted when creating the virtual machine.
 
 1. Inside the remote desktop connection to DC01, open a PowerShell window, and type the following command:
 
