@@ -26,14 +26,10 @@ In this hands-on lab, you will learn how to:
 
 The following is required to complete this hands-on lab:
 
-- [Windows PowerShell 2.0][1]
-- [Windows Azure PowerShell CmdLets][2]
+- [Windows PowerShell 3.0] (http://microsoft.com/powershell/)
+- [Windows Azure PowerShell Cmdlets](http://msdn.microsoft.com/en-us/library/windowsazure/jj156055)
 - A Windows Azure subscription - [sign up for a free trial](http://aka.ms/WATK-FreeTrial)
-
-[1]: http://microsoft.com/powershell/
-[2]: http://msdn.microsoft.com/en-us/library/windowsazure/jj156055
-
-Additionally, you must complete the _Provisioning a Windows Azure Virtual Machine (PowerShell)_ HOL
+- Complete the _Provisioning a Windows Azure Virtual Machine (PowerShell)_ HOL
 
 >**Note:** In order to run through the complete hands-on lab, you must have network connectivity. 
 

@@ -2,12 +2,6 @@
 <DependencyCheckerConfiguration version="2.0">
 	<title>Deploying Active Directory in Windows Azure (PowerShell)</title>
 	<dependencies>
-		<dependency 
-			hint="PowerShell2" 
-			name="Windows PowerShell 2.0" 
-			helpLink="http://microsoft.com/powershell/" 
-			disableSkip="false"
-			type="WebPI" />
 		<dependency
 			hint="WindowsAzurePowershell"
 			name="Windows Azure PowerShell"
