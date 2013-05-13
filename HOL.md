@@ -235,9 +235,11 @@ Exercise 1 contains 2 tasks:
 
 	_New-Partition Cmdlet Output_
 
+	>**Note:** Do not close the remote session as you will need it in the next exercise.
+
 <a name="Exercise2" /></a>
 ### Exercise 2: Deploy a new domain controller in Windows Server 2012 ###
-You have just created a base virtual machine called DC01, attached the necessary data disk, and provisioned the disk. We are going to login to DC01 to install and configure active directory and then verify the install was successful.
+You have just created a base virtual machine called DC01, attached the necessary data disk, and provisioned the disk. Now you are going to install and configure active directory and then verify the install was successful.
 
 Exercise 2 contains 3 tasks:
 
@@ -248,17 +250,7 @@ Exercise 2 contains 3 tasks:
 <a name="Ex2Task1" /></a>
 #### Task 1 - Install the Active Directory Domain Services Role ####
 
-1. In the **Virtual Machines** section of the Windows Azure portal, select the **DC01** virtual machine, and then on the toolbar, click the **Connect** icon to connect using **Remote Desktop Connection**.
-
-	![Connecting to the DC01 VM](./Images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
-
-	_Connecting to the DC01 virtual machine_
-
-1. Open the DC01.rdp file, and connect to the virtual machine.
-
-	>**Note:** use the credentials that you inserted when creating the virtual machine.
-
-1. Inside the remote desktop connection to DC01, open a PowerShell window, and type the following command:
+1. In the PowerShell remote session from the previous exercise, type the following command to install the Active Directory role and features:
 
 	````PowerShell
 	Add-WindowsFeature -Name AD-Domain-Services  -IncludeManagementTools
@@ -276,33 +268,38 @@ Exercise 2 contains 3 tasks:
 	Install-ADDSForest  -DomainName "contoso.com" -InstallDns:$true  -DatabasePath "F:\NTDS"  -LogPath "F:\NTDS"  -SysvolPath "F:\SYSVOL"  -NoRebootOnCompletion:$false  -Force:$true
 	````
 
-	>**Note:** The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that we added earlier, and does not have this feature enabled.
-
-	![Promoting the domain controller with powershell ](./Images/promoting-the-domain-controller-with-powershell.png?raw=true "Promoting the domain controller with powershell")
+	>**Note:** The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that you added earlier, and does not have this feature enabled.
 
 1. At the **SafeModeAdministratorPassword** prompt and the **Confirm SafeModeAdministratorPassword** prompt, type **Passw0rd!**, and then press **Enter**. 
-
-	>**Note:** The computer is promoted to domain controller. After a few moments, the DC01 Virtual Machine will restart. You will lose the connection to the restarting Virtual Machine.
 
 	![Configuring the administrator password](./Images/configuring-the-administrator-password.png?raw=true "Configuring the administrator password")
 
 	_Configuring the administrator password_
 
+1. Wait for the command to finish.
+
+	![Promoting the domain controller with powershell ](./Images/promoting-the-domain-controller-with-powershell.png?raw=true "Promoting the domain controller with powershell")
+
+	_Promoting the domain controller with powershell_
+
+1. Once the command finishes and the computer is promoted to domain controller, the DC01 Virtual Machine will restart. You will lose connection to the remote session.
+
+	![Domain controller configured ](./Images/domain-controller-configured.png?raw=true "Domain controller configured")
+
+	_Domain controller configured_
+
 <a name="Ex2Task3" /></a>
 #### Task 3 - Verify the Domain Controller Installed Successfully ####
 
-1. Wait two minutes for the DC01 Virtual Machine to restart.
-In the Azure portal, on the Virtual Machines page, select **DC01**, and on the toolbar, click the **Connect** icon.
-	
-	![Connecting to the DC01 VM](./Images/connecting-to-the-dc01-vm.png?raw=true "Connecting to the DC01 VM")
+1. Wait two to three minutes for the DC01 Virtual Machine to restart.
+In Windows Azure PowerShell, type the following command to remotely connect to the virtual machine. Replace [YOUR-VM-DNS] and [YOUR-ENDPOINT-PORT] placeholders with the values obtained when configuring the new data disk in Exercise 1. Replace [YOUR-VM-USERNAME] with the administrator username provided when you created the virtual machine.
 
-	_Connecting to the DC01 virtual machine_
+	````PowerShell
+	Enter-PSSession -ComputerName '[YOUR-VM-DNS]' -Port [YOUR-ENDPOINT-PORT] -Authentication Negotiate -Credential '[YOUR-VM-USERNAME]' -UseSSL -SessionOption (New-PSSessionOption -SkipCACheck -SkipCNCheck)
+	````
+	>**Note:** When prompted, login with the administrator password.
 
-1. Open the DC01.rdp file, and connect to the virtual machine.
-
-	>**Note:** use the credentials that you inserted when creating the virtual machine.
-
-1. To verify that DC01 is working properly, open a Powershell window, and run the following command:
+1. To verify that DC01 is working properly, run the following command:
 
 	````PowerShell
 	dcdiag.exe
@@ -317,4 +314,4 @@ In the Azure portal, on the Virtual Machines page, select **DC01**, and on the t
 <a name='Summary'/>
 ## Summary ##
 
-In this lab, you went through the steps of deploying a new Active Directory Domain controller in a new forest using Windows Azure virtual machines.
+In this lab, you went through the steps of deploying a new Active Directory Domain controller in a new forest using Windows Azure virtual machines and remote PowerShell.
