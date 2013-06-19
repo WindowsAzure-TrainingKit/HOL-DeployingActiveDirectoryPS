@@ -5,8 +5,6 @@
 <a name="Overview" /></a>
 ## Overview ##
 
-In this lab, you will provision a newly created Windows Server 2012 Virtual Machine called DC01 in Windows Azure using the Windows Azure PowerShell Cmdlets and then deploy Active Directory using Server Manager on DC01. DC01 will be the first domain controller in a new forest.
-
 When deploying Active Directory in Windows Azure, two aspects are important to point out.
 
 The first one is the networking configuration. Domain members and domain controllers need to find the DNS server hosting the domain DNS information. You will use the Azure network configuration, to set up the DNS service.
@@ -151,7 +149,7 @@ Exercise 1 contains 2 tasks:
 
 1. Start **Windows Azure PowerShell**.
 
-1. Run the following command to add a data disk to the existing virtual machine. Make sure you replace the plaholder accordingly, using the service name you provided when creating the virtual machine.
+1. Run the following command to add a data disk to the existing virtual machine. Make sure you replace the placeholder accordingly, using the service name you provided when creating the virtual machine.
 
 	````PowerShell
 	$cloudSvcName = '[YOUR-SERVICE-NAME]'
@@ -266,7 +264,7 @@ Exercise 2 contains 3 tasks:
 
 	>**Note:** The C: disk is the OS disk, and has caching enabled. The Active Directory database should not be stored on a disk that has write caching enabled. The F: disk is the data disk that you added earlier, and does not have this feature enabled.
 
-1. At the **SafeModeAdministratorPassword** prompt and the **Confirm SafeModeAdministratorPassword** prompt, type **Passw0rd!**, and then press **Enter**. 
+1. At the **SafeModeAdministratorPassword** prompt and the **Confirm SafeModeAdministratorPassword** prompt, type the administrator password, and then press **Enter**. 
 
 	![Configuring the administrator password](./Images/configuring-the-administrator-password.png?raw=true "Configuring the administrator password")
 
