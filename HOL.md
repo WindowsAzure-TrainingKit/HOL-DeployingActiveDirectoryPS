@@ -247,7 +247,7 @@ Exercise 2 contains 3 tasks:
 1. In the PowerShell remote session from the previous exercise, type the following command to install the Active Directory role and features:
 
 	````PowerShell
-	Add-WindowsFeature -Name AD-Domain-Services  -IncludeManagementTools
+	Install-WindowsFeature -Name AD-Domain-Services  -IncludeManagementTools
 	````
 
 	![Adding the AD feature](./Images/adding-the-ad-feature.png?raw=true "Adding the AD feature")
